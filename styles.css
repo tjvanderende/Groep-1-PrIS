@@ -1,4 +1,19 @@
-.navigator-button{
-  background-color: #3f51b5;
-  color: white;
+.modalBackground{
+  background-color: white;
+  float: left;
+}
+.elementsInModal{
+  padding: 5px 5px 5px 5px;
+}
+.lesInfo{
+  border: 1px solid black;
+  padding: 2px;
+  min-width: 150px;
+  max-width: 200px;
+  word-wrap: break-word;
+  background-color: white;
+  float: right;
+}
+.wrapper{
+  width: 500px
 }

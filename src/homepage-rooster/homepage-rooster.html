@@ -1,0 +1,118 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/mp-calendar/mp-calendar.html">
+<link rel="import" href="../../bower_components/nebula-dialog/nebula-dialog.html">
+
+<dom-module id="homepage-rooster">
+    <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <mp-calendar day-labels='["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"]'
+             show-days-in-month=42>
+    </mp-calendar>
+    <nebula-dialog id="dialog">
+      <div class="wraper">
+    <div class="modalBackground">
+      <div class="elementsInModal">
+          <h2>[[title]]</h2>
+          <p>Klik op de les voor extra informatie en opties</p>
+          <div id="lessenVanVandaag">
+              <!-- Word gevuld door agendaItemClicked function -->
+          </div>
+      </div>
+    </div>
+    <div class="lesInfo">
+      Vak: {{vakNaam}} <br>
+      Docent: {{docentNaam}}<br>
+      Klascode: {{klasCode}}<br>
+      Begint om: {{startTijd}}<br>
+      Eindigt om: {{eindTijd}}
+    </div>
+  </div>
+    </nebula-dialog>
+  </template>
+
+    <script>
+        Polymer({
+
+            is: 'homepage-rooster',
+
+            properties: {
+                lessenLijst: {
+                    value: {
+                        "les1": {
+                            "docent": {
+                                "naam": "Jos van Reenen",
+                                "docentNummer": 3823838
+                            },
+                            "klas": {
+                                "naam": "V1E",
+                                "code": "TICT-V1E"
+                            },
+                            "start": "13:30",
+                            "eind": "15:30",
+                            "datum": "29-03-2017",
+                            "cursus": "GP-15"
+                        },
+                        "les2": {
+                            "docent": {
+                                "naam": "Martijn Janssen",
+                                "docentNummer": 1234567
+                            },
+                            "klas": {
+                                "naam": "V1E",
+                                "code": "TICT-V1E"
+                            },
+                            "start": "08:30",
+                            "eind": "11:30",
+                            "datum": "29-03-2017",
+                            "cursus": "AUI-15"
+                        }
+                    },
+                },
+                title: {
+                    type: String,
+                },
+                date: {},
+                vakNaam: {},
+                docentNaam: {},
+                klasCode: {},
+                startTijd: {},
+                eindTijd: {},
+            },
+
+            listeners: {
+                'dateSelected': 'agendaItemClicked',
+                'on-tap': 'test'
+            },
+
+            agendaItemClicked: function(e) {
+                this.$.dialog.show();
+                this.date = e.detail;
+                this.title = "Beschikbare lessen van " + this.date.isoDate;
+                var html = "";
+                var count = Object.keys(this.lessenLijst).length;
+                for (var i = 1; i < count + 1; i++) {
+                  html = html + "<div id='lesEntry"+ i + "'><li><a href='javascript:void(0);' onclick='fillInfoBox(" + i + ");'>" + this.lessenLijst["les"+i].cursus + " voor de klas: " + this.lessenLijst["les"+i].klas.naam +"</a></li></div>";
+                }
+                document.getElementById("lessenVanVandaag").innerHTML = html;
+            },
+            localFillInfoBox: function(arrNum) {
+              this.vakNaam = this.lessenLijst["les"+arrNum].cursus;
+              this.docentNaam = this.lessenLijst["les"+arrNum].docent.naam;
+              this.klasCode = this.lessenLijst["les"+arrNum].klas.code;
+              this.startTijd = this.lessenLijst["les"+arrNum].start;
+              this.eindTijd = this.lessenLijst["les"+arrNum].eind;
+            }
+
+        });
+        function fillInfoBox(arrNum){
+          var instance = document.querySelector('homepage-rooster');
+          instance.localFillInfoBox(arrNum);
+        }
+
+    </script>
+</dom-module>

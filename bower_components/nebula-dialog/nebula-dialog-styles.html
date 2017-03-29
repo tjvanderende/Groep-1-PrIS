@@ -1,0 +1,78 @@
+<!--
+@license
+Copyright (c) 2017 Ars Nebula LLC.
+This code may be used under the terms found in LICENSE.md of this repository.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+A stylesheet to use when building your own custom dialogs with `nebula-dialog-behavior`. The styles expect you to have a container element representing your dialog content with an id of `dialog`.
+
+```html
+<dom-module id="nebula-dialog">
+  <template>
+    <style include="nebula-dialog-styles"></style>
+    <div id="dialog">
+      <slot></slot>
+    </div>
+   </template>
+   <script>
+    Polymer({
+      is: 'nebula-dialog',
+      behaviors: [
+        Nebula.DialogBehavior
+      ]
+    })
+  </script>
+</dom-module>
+```
+
+-->
+<dom-module id="nebula-dialog-styles">
+  <template>
+    <style>
+      :host {
+        position: fixed;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;        
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;        
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;        
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background-color: var(--nebula-dialog-backdrop-color, var(--nebula-ui-backdrop-color, hsla(0, 0%, 0%, 0.6)));
+        z-index: 9998;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity var(--nebula-dialog-transition-duration, 0.25s) linear, visibility 0s linear var(--nebula-dialog-transition-duration, 0.25s);
+        @apply --nebula-dialog;
+      }
+      :host #dialog {
+        transform: scale(0.9);
+        transition: transform var(--nebula-dialog-transition-duration, 0.25s) ease-in-out;
+      }
+      :host([opened]) {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity var(--nebula-dialog-transition-duration, 0.25s) linear;
+        @apply --nebula-dialog-opened;
+      }
+      :host([opened]) #dialog {
+        transform: scale(1);
+      }
+    </style>
+  </template>
+</dom-module>
