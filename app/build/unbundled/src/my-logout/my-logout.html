@@ -1,0 +1,23 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+</head><body><dom-module id="my-logout">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      span {
+        @apply(--paper-font-body1);
+      }
+    </style>
+
+    <paper-button raised="" on-click="_logout_clicked">Klik hier als je zeker weet dat je echt wilt uitloggen</paper-button>
+
+  </template>
+
+  <script>!function(){"use strict";Polymer({is:"my-logout",properties:{rol:{type:String,value:"undefined",notify:!0}},_logout_clicked:function(){console.log("_logout_clicked"),this.rol="undefined",this._go_home()},_go_home:function(){document.querySelector("my-app").$.approuter.data={page:""}}})}();</script>
+</dom-module>
+</body></html>
