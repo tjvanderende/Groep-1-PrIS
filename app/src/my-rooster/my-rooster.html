@@ -11,42 +11,30 @@
 <dom-module id="my-rooster">
     <template>
       <style include="fullcalendar-styles">
-      .modalBackground{
-        background-color: white;
-        float: left;
-      }
-      .elementsInModal{
-        padding: 5px 5px 5px 5px;
-      }
+
       .lesInfo{
-        border: 1px solid black;
-        padding: 2px;
         min-width: 150px;
         max-width: 200px;
         word-wrap: break-word;
         background-color: white;
-        float: right;
+        padding: 10px;
+        border-radius: 15px;
+        -moz-border-radius: 15px;
       }
-      .wrapper{
-        width: 500px
-      }
+    h3{
+      margin: 5px 5px 5px 5px;
+    }
 </style>
       <div id="calendar"></div>
       <nebula-dialog id="dialog">
-     <div class="wraper">
-    <div class="modalBackground">
-      <div class="elementsInModal">
-          <h2>Test</h2>
-      </div>
-    </div>
     <div class="lesInfo">
-      Vak:  <br>
-      Docent: <br>
-      Klascode: <br>
-      Begint om: <br>
-      Eindigt om:
+      <h3>Informatie over vandaag</h3>
+      Vak: [[vakNaam]] <br>
+      Docent: [[vakDocent]]<br>
+      Klascode: [[klasCode]]<br>
+      Begint om: [[start]]<br>
+      Eindigt om: [[end]]
     </div>
-  </div>
     </nebula-dialog>
       <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
@@ -56,7 +44,13 @@
 
             is: 'my-rooster',
 
-            properties: {},
+            properties: {
+              vakNaam: {},
+              vakDocent: {},
+              klasCode: {},
+              start: {},
+              end: {},
+            },
 
             ready: function() {
 
@@ -71,12 +65,17 @@
                         right: 'month,basicWeek,basicDay'
                     },
                     editable: false,
-                    eventLimit: true, // allow "more" link when too many events
+                    eventLimit: true,
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
                         console.log(calEvent);
                         self.$.dialog.show();
+                        self.vakNaam = calEvent.cursus;
+                        self.vakDocent = calEvent.docent.naam;
+                        self.klasCode = calEvent.klas.code;
+                        self.start = calEvent._start._i;
+                        self.end = calEvent._end._i;
                     }
                 });
             }
