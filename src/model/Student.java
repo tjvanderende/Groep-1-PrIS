@@ -80,4 +80,8 @@ public class Student extends Person {
 		this.studentNummer = studentNummer;
 	}
 	
+	public double calculatePercentage(){
+		return 30.0;
+	}
+	
 }

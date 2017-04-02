@@ -3,6 +3,7 @@ package model;
 public abstract class Person {
 	private String username;
 	private String voornaam;
+	private String achternaam;
 	private String password;
 	protected PersonRole roles;
 	public Person(String uname, String pword, String voornaam){
@@ -54,5 +55,17 @@ public abstract class Person {
 
 	public void setVoornaam(String voornaam) {
 		this.voornaam = voornaam;
+	}
+
+
+
+	public String getAchternaam() {
+		return achternaam;
+	}
+
+
+
+	public void setAchternaam(String achternaam) {
+		this.achternaam = achternaam;
 	}
 }

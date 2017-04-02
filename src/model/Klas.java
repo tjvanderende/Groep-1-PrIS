@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Klas {
 	private String klasCode;
@@ -14,7 +15,9 @@ public class Klas {
 	public void addStudent(Student s) {
 		this.studenten.add(s);
 	}
-
+	public ArrayList<Student> getStudenten(){
+		return studenten;
+	}
 	public String getKlasNaam() {
 		return klasNaam;
 	}
@@ -33,5 +36,16 @@ public class Klas {
 	
 	public String toString(){
 		return this.klasCode + " " + this.klasNaam;
+	}
+	
+	public boolean equals(Object andereObject){
+		boolean isGelijk = false;
+		if(andereObject instanceof Klas){
+			Klas andereKlas = (Klas) andereObject;
+			isGelijk =  this.klasCode.equals(andereKlas.klasCode)
+			  && this.klasNaam.equals(andereKlas.klasNaam);
+		}
+		return isGelijk;
+		
 	}
 }

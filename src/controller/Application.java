@@ -32,11 +32,11 @@ public class Application {
 		PrIS infoSysteem = new PrIS();
 		
 		RoosterController roosterController = new RoosterController(infoSysteem);
-		
+		DocentController docentController = new DocentController(infoSysteem);
 		server.registerHandler("/rooster", roosterController);
-
+		server.registerHandler("/docent", docentController);
 		//server.registerHandler("/login", loginController);
-
+//
 		server.start();
 	}
 }

@@ -23,12 +23,16 @@ public class RoosterController implements Handler {
 		// TODO Auto-generated method stub
 		if (conversation.getRequestedURI().startsWith("/rooster")) {
 			this.ophalenLessen(conversation);
+		} else if (conversation.getRequestedURI().startsWith("/rooster/les/presentie")){
+			
 		}
 		
 	}
-	
+	private void ophalenLesPresentie(Conversation conversation){
+		
+	}
 	private void ophalenLessen(Conversation conversation){
-		ArrayList<Les> lessen = this.informatieSysteem.getLessenByPerson();
+		ArrayList<Les> lessen = this.informatieSysteem.getLessen();
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
 
 		for(Les les : lessen){
@@ -42,9 +46,8 @@ public class RoosterController implements Handler {
 			jsonObjectDocent.add("email", les.getDocent().getEmail())
 							.add("voornaam", les.getDocent().getVoornaam());
 			
-			jsonObjectLes.add("start",les.getStartTijd())
-						 .add("eind", les.getEindTijd())
-						 .add("datum", les.getDatum())
+			jsonObjectLes.add("start",les.getDatum()+ les.getStartTijd()) // "2017-03-30T11:30";
+						 .add("end", les.getDatum()+ les.getEindTijd())
 						 .add("cursus", les.getCursusCode())
 						 .add("docent", jsonObjectDocent)
 						 .add("klas", jsonObjectKlas);
@@ -53,7 +56,8 @@ public class RoosterController implements Handler {
 
 		}
 		String lJsonOutStr = jsonArrayBuilder.build().toString();												// maak er een string van
-		conversation.sendJSONMessage(lJsonOutStr);		
+		conversation.sendJSONMessage(lJsonOutStr);	
+
 	}
 	
 }

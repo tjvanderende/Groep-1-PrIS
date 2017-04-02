@@ -12,10 +12,12 @@ import java.util.function.Predicate;
  */
 public class PrIS {
 	private PrISService dataService;
-	
+	private ArrayList<Les> lessen = new ArrayList<Les>();
 	public PrIS(){
+		
 		// verander dit gedeelte om de data uit een andere bron te halen.
 		this.dataService = new PrISMockService();
+		this.lessen = this.loadLessenByPerson();
 	}
 	/**
 	 * Haal een student op
@@ -37,12 +39,17 @@ public class PrIS {
 	}
 	
 	/**
-	 * 
+	 * Haal via rooster alle klassen op.
 	 * @param klasNaam
 	 * @return
 	 */
-	public ArrayList<Les> getLessenByKlas(String klasNaam) {
-		return null;
+	public ArrayList<Klas> getKlassen() {
+		ArrayList<Klas> klassen = new ArrayList<Klas>();
+		for (Les les : this.getLessen()){
+			if(!klassen.contains(les.getKlas()))
+				klassen.add(les.getKlas());
+		}
+		return klassen;
 	}
 	
 	/**
@@ -50,7 +57,7 @@ public class PrIS {
 	 * @param docentEmail
 	 * @return
 	 */
-	public ArrayList<Les> getLessenByPerson() {
+	public ArrayList<Les> loadLessenByPerson() {
 	/*	ArrayList<Les> docentLessen = new ArrayList<Les>();
 		for(Les les : this.dataService.loadLessen()) {
 			if(docent.test(les.getDocent())){
@@ -72,6 +79,25 @@ public class PrIS {
 		
 	}
 	
+	public String getSystemRole(Person person){
+		if(person instanceof Docent){
+			return "docent";
+		} else {
+			return "student";
+		}
+		
+	}
+	/**
+	 * Haal ingelogde gebruiker op (als deze er is).
+	 * @return false als er geen ingelogde gebruiker is, anders persoon object.
+	 */
+	
+	public Person getLoggedInPerson(){
+		return new Docent("test", "test", "test", "test");
+	}
+	public ArrayList<Les> getLessen() {
+		return lessen;
+	}
 }
 
 
