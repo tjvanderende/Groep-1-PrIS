@@ -1,19 +1,52 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
-<link rel="import" href="../../bower_components/mp-calendar/mp-calendar.html">
+
+<link rel='import' href='../../bower_components/fullcalendar/dist/fullcalendar-styles.html' />
 <link rel="import" href="../../bower_components/nebula-dialog/nebula-dialog.html">
+
+<script src='../../bower_components/jquery/dist/jquery.min.js'></script>
+<script src='../../bower_components/moment/min/moment.min.js'></script>
+<script src='../../bower_components/fullcalendar/dist/fullcalendar.js'></script>
 
 <dom-module id="my-rooster">
     <template>
-        <style>
-            :host {
-                display: block;
-            }
-        </style>
+      <style include="fullcalendar-styles">
 
-        <mp-calendar day-labels='["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"]'
-                     show-days-in-month=42>
-        </mp-calendar>
+      .lesInfo{
+        min-width: 150px;
+        max-width: 400px;
+        word-wrap: break-word;
+        background-color: white;
+        padding: 10px;
+        border-radius: 15px;
+        -moz-border-radius: 15px;
+      }
+      .blue{
+        background-color: #0066cc;
+        color: white;
+      }
+      .red{
+        background-color: #990000;
+        color: white;
+      }
+    h3{
+      margin: 5px 5px 5px 5px;
+    }
+</style>
+      <div id="calendar"></div>
+      <nebula-dialog id="dialog">
+    <div class="lesInfo">
+      <h3>Informatie over vandaag</h3>
+      Vak: [[vakNaam]] <br>
+      Docent: [[vakDocent]]<br>
+      Klascode: [[klasCode]]<br>
+      Begint om: [[start]]<br>
+      Eindigt om: [[end]]<br><br>
+      <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button>
+      <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
+    </div>
+    </nebula-dialog>
+      <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
 
     <script>
@@ -22,84 +55,46 @@
             is: 'my-rooster',
 
             properties: {
-                lessenLijst: {
-                    value: {
-                        "les1": {
-                            "docent": {
-                                "naam": "Jos van Reenen",
-                                "docentNummer": 3823838
-                            },
-                            "klas": {
-                                "naam": "V1E",
-                                "code": "TICT-V1E"
-                            },
-                            "start": "13:30",
-                            "eind": "15:30",
-                            "datum": "29-03-2017",
-                            "cursus": "GP-15"
-                        },
-                        "les2": {
-                            "docent": {
-                                "naam": "Martijn Janssen",
-                                "docentNummer": 1234567
-                            },
-                            "klas": {
-                                "naam": "V1E",
-                                "code": "TICT-V1E"
-                            },
-                            "start": "08:30",
-                            "eind": "11:30",
-                            "datum": "29-03-2017",
-                            "cursus": "AUI-15"
-                        }
-                    },
-                },
-                title: {
-                    type: String
-                },
-                date: {},
-                vakNaam: {},
-                docentNaam: {},
-                klasCode: {},
-                startTijd: {},
-                eindTijd: {}
-            },
-            _go_home: function() {
-                var lApp = document.querySelector('my-app');  //het polymer element <my-app>
-                var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
-                lAppRouter.data={page: ""};                   // vul het data attribute met de homepage url
-                                                              // door de two way binding in <app-route> en <app-location>
-                                                              // zal ook de url echt wijzigen
-            },
-            listeners: {
-                'dateSelected': 'agendaItemClicked',
-                'on-tap': 'test'
+              vakNaam: {},
+              vakDocent: {},
+              klasCode: {},
+              start: {},
+              end: {},
             },
 
-            agendaItemClicked: function(e) {
-                this.$.dialog.show();
-                this.date = e.detail;
-                this.title = "Beschikbare lessen van " + this.date.isoDate;
-                var html = "";
-                var count = Object.keys(this.lessenLijst).length;
-                for (var i = 1; i < count + 1; i++) {
-                    html = html + "<div id='lesEntry"+ i + "'><li><a href='javascript:void(0);' onclick='fillInfoBox(" + i + ");'>" + this.lessenLijst["les"+i].cursus + " voor de klas: " + this.lessenLijst["les"+i].klas.naam +"</a></li></div>";
-                }
-                document.getElementById("lessenVanVandaag").innerHTML = html;
+            bekijkPresentie: function() {
+              alert("Open nu dat presentie schermpie");
             },
-            localFillInfoBox: function(arrNum) {
-                this.vakNaam = this.lessenLijst["les"+arrNum].cursus;
-                this.docentNaam = this.lessenLijst["les"+arrNum].docent.naam;
-                this.klasCode = this.lessenLijst["les"+arrNum].klas.code;
-                this.startTijd = this.lessenLijst["les"+arrNum].start;
-                this.eindTijd = this.lessenLijst["les"+arrNum].eind;
+
+            closeModal: function(){
+              this.$.dialog.close();
+            },
+
+            handleResp: function(request) {
+                var self = this;
+                $(this.$.calendar).fullCalendar({
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+                    },
+                    editable: false,
+                    eventLimit: true,
+                    events: request.detail.response,
+
+                    eventClick: function(calEvent, jsEvent, view) {
+                        console.log(calEvent);
+                        self.$.dialog.show();
+                        self.vakNaam = calEvent.cursus;
+                        self.vakDocent = calEvent.docent.naam;
+                        self.klasCode = calEvent.klas.code;
+                        self.start = calEvent._start._i;
+                        self.end = calEvent._end._i;
+                    }
+                });
             }
 
-        });
-        function fillInfoBox(arrNum){
-            var instance = document.querySelector('my-rooster');
-            instance.localFillInfoBox(arrNum);
-        }
 
+        });
     </script>
 </dom-module>

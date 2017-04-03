@@ -1,0 +1,14 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="../../bower_components/mp-calendar/mp-calendar.html">
+<link rel="import" href="../../bower_components/nebula-dialog/nebula-dialog.html">
+
+</head><body><dom-module id="my-rooster">
+    <template>
+        <mp-calendar day-labels="[&quot;Zo&quot;, &quot;Ma&quot;, &quot;Di&quot;, &quot;Wo&quot;, &quot;Do&quot;, &quot;Vr&quot;, &quot;Za&quot;]" show-days-in-month="42">
+        </mp-calendar>
+    </template>
+
+    <script>function fillInfoBox(e){document.querySelector("my-rooster").localFillInfoBox(e)}Polymer({is:"my-rooster",properties:{lessenLijst:{value:{les1:{docent:{naam:"Jos van Reenen",docentNummer:3823838},klas:{naam:"V1E",code:"TICT-V1E"},start:"13:30",eind:"15:30",datum:"29-03-2017",cursus:"GP-15"},les2:{docent:{naam:"Martijn Janssen",docentNummer:1234567},klas:{naam:"V1E",code:"TICT-V1E"},start:"08:30",eind:"11:30",datum:"29-03-2017",cursus:"AUI-15"}}},title:{type:String},date:{},vakNaam:{},docentNaam:{},klasCode:{},startTijd:{},eindTijd:{}},listeners:{dateSelected:"agendaItemClicked"},agendaItemClicked:function(e){this.$.dialog.show(),this.date=e.detail,this.title="Beschikbare lessen van "+this.date.isoDate;for(var s="",t=Object.keys(this.lessenLijst).length,a=1;a<t+1;a++)s=s+"<div id='lesEntry"+a+"'><li><a href='javascript:void(0);' onclick='fillInfoBox("+a+");'>"+this.lessenLijst["les"+a].cursus+" voor de klas: "+this.lessenLijst["les"+a].klas.naam+"</a></li></div>";document.getElementById("lessenVanVandaag").innerHTML=s},localFillInfoBox:function(e){this.vakNaam=this.lessenLijst["les"+e].cursus,this.docentNaam=this.lessenLijst["les"+e].docent.naam,this.klasCode=this.lessenLijst["les"+e].klas.code,this.startTijd=this.lessenLijst["les"+e].start,this.eindTijd=this.lessenLijst["les"+e].eind}});</script>
+</dom-module>
+</body></html>

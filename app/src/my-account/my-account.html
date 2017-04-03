@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+<dom-module id="my-account">
+  <style>
+    .naam{
+
+    }
+    .naamout{
+      text-indent: 20px;
+      font-size: 20px;
+    }
+    .foto-mats{
+      padding: 2px;
+      border: solid 0.5px;
+      float: right;
+      width: 250px;
+    }
+    .toelichting-bttn{
+      text-transform: none;
+      color: white;
+      background-color: #333;
+    }
+    .hidden{
+      display: none;
+      border: solid 1px;
+      padding: 10px;
+    }
+    .x{
+      display: none;
+      border: solid 1px;
+      text-decoration: underline;
+      padding: 10px;
+    }
+  </style>
+  <template>
+    <div class="my_vertical-elements">
+      <div class="my-line">
+        <img class="foto-mats" src="../../images/Mats.jpg">
+        <span class="naam">Naam:</span>
+        <span class="naamout">{{naam()}}</span><br><br><br>
+        <span class="presentie" id="presentie"> Presentie: {{presentie()}}</span><br><br><br>
+        <span class="gemeld">{{gemeld()}}</span><br><br><br>
+        <paper-button id="bttn"class="toelichting-bttn" on-tap="click">Toelichting</paper-button><br><br>
+        <span id="hidden" class="hidden">{{toelichting()}}</span>
+        <button id="x" class="x" on-tap="hide">Close</button>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: "my-account",
+      naam: function(){
+        naam = "Mats de Zwaard";
+        return naam;
+      },
+      presentie: function(){
+        presentie = "12%";
+        return presentie;
+      },
+      gemeld : function(){
+        gemeld = "Gemeld aan SLB'er"
+        return gemeld;
+      },
+      toelichting: function(){
+        toelichting = "Student is vaak afwezig geweest door drugsmisbruik";
+        return toelichting;
+      },
+      click: function(){
+        var elem = this.$.hidden;
+        elem.style.display = "inline";
+        var elem = this.$.x;
+        elem.style.display = "inline";
+      },
+      hide: function(){
+        var elem = this.$.hidden;
+        var elem1 = this.$.x;
+        elem.style.display = "none";
+        elem1.style.display = "none";
+      }
+    });
+  </script>
+</dom-module>

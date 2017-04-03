@@ -1,0 +1,82 @@
+<html><head><link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+</head><body><dom-module id="my-login">
+  <template>
+    <style>
+      :root {
+        --paper-input-container-focus-color: #1a9fd9;
+      }
+      :host {
+        display: block;
+      }
+
+      span {
+        @apply(--paper-font-body1);
+      }
+      .toast-button {
+        text-transform: none;
+        color: white;                           /* white tekst */
+        background: #1a9fd9;                    /* kind of blue */
+        --paper-button-ink-color: #00567B;      /* kind of dark blue */
+        margin-left: 0px;
+      }
+      .usericondiv {
+         @apply(--layout-horizontal);
+         @apply(--layout-center-justified);
+       }
+      .my-icon {
+        border: #D4D4D4 3px solid;
+        border-radius: 150px;
+        padding: 8px;
+        --iron-icon-fill-color: #1a9fd9;
+        height: 60px;
+        width: 60px;
+      }
+      .my-input {
+        padding-left: 8px;
+        padding-right: 1px;
+      }
+      .my-button {
+        width: 100%;
+        color: white;
+        background: #1a9fd9;
+        --paper-button-ink-color: #00567B;
+        margin-top: 5px;
+      }
+      .my-button[disabled] {            /* styling als de opslaan button disabled is. */
+        background: lightgray;
+        color: darkgray;
+      }
+    </style>
+
+    <paper-toast id="toast_reeds_aangelogd" duration="0" text="U bent al ingelogd!">
+      <paper-button on-click="_toast_clicked" class="toast-button">Sluiten</paper-button>
+    </paper-toast>
+
+    <div class="usericondiv">
+      <iron-icon icon="icons:perm-identity" class="my-icon"></iron-icon>
+    </div>
+    <div class="my-input">
+      <paper-input id="email_element" on-keydown="_checkForEnter" label="gebruikersnaam" value="{{username}}"></paper-input>
+      <paper-input id="wachtwoord_element" on-keydown="_checkForEnter" label="wachtwoord" type="password" value="{{_password}}"></paper-input>
+    </div>
+    <paper-button id="login_button_element" class="my-button" on-click="_ophalen_login_request_handler" raised="">
+        Inloggen
+    </paper-button>
+
+    <iron-ajax id="ajax_login" method="POST" url="/login" handle-as="json" on-response="_ophalen_login_response_handler">
+    </iron-ajax>
+
+  </template>
+
+  <script>!function(){"use strict";Polymer({is:"my-login",properties:{_password:{type:String,value:"geheim"},rol:{type:String,notify:!0},username:{type:String,value:"john.smeets@hu.nl",notify:!0}},_checkForEnter:function(e){if("email_element"==e.currentTarget.id){if(13===e.keyCode){var n=this.$.wachtwoord_element;n.focus()}}else if(13===e.keyCode){this.$.login_button_element;this.$.login_button_element.click()}},_go_home:function(){document.querySelector("my-app").$.approuter.data={page:""}},_ophalen_login_request_handler:function(){if(console.log("_ophalen_login_request_handler username="+this.username),"undefined"==this.rol)this.$.ajax_login.contentType="application/json",this.$.ajax_login.body={username:this.username,password:this._password},this.$.ajax_login.generateRequest();else{this.$.toast_reeds_aangelogd.open()}},_ophalen_login_response_handler:function(e){console.log("_ophalen_login_response_handler username="+this.username),this.rol=e.detail.response.rol,"undefined"==this.rol?(this.$.email_element.invalid=!0,this.$.wachtwoord_element.invalid=!0):(this.$.email_element.invalid=!1,this.$.wachtwoord_element.invalid=!1,this._go_home())},_toast_clicked:function(e){e.path[1].toggle(),this._go_home()}})}();</script>
+</dom-module>
+</body></html>
