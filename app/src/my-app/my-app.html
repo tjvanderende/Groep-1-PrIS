@@ -149,6 +149,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="icons:today"></iron-icon>
             <span>rooster</span>
           </a>
+          <a name="meldingen" href$="[[_c_baseURL]]systeem/meldingen" >
+            <iron-icon icon="icons:today"></iron-icon>
+            <span>meldingen</span>
+          </a>
  
           <a name="login" href$="[[_c_baseURL]]login"  verborgen$="[[!_are_strings_equal(_rol, 'undefined')]]">
             <iron-icon icon="account-box"></iron-icon>
@@ -222,15 +226,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  title="Rooster"
                  element$="my-rooster">
           <paper-material elevation="1">
-            <!--
-              c_visible="true" als deze section geselecteerd is.
-              LET OP: boolean values moeten als string doorgegeven worden,
-                      vandaar de quotes rondom de function aanroep.
-                      De aanwezige literal waarde wordt met enkele quotes doorgegeven
-            -->
-            <my-rooster
-                    rol="{{_rol}}">
+            <my-rooster>
             </my-rooster>
+          </paper-material>
+        </section>
+        <section name="systeem_meldingen"
+                 title="Meldingen"
+                 element$="my-meldingen">
+          <paper-material elevation="1">
+            <my-meldingen rol="{{_rol}}">
+            </my-meldingen>
           </paper-material>
         </section>
           <section name="login" 
