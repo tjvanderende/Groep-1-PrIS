@@ -1,0 +1,35 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../fa-awesome/fa-awesome.html">
+<link rel="import" href="mp-calendar-theme.html">
+
+
+
+</head><body><dom-module id="mp-calendar">
+    <style is="custom-style" include="mp-calendar-theme"></style>
+
+    <template>
+        <div id="content">
+            <div id="header">
+                <div class="month-display">
+                    <div on-click="prevMonthHandler">
+                        <fa-awesome id="prevMonth" icon="fa:chevron-left" class="calendar-icon-left"></fa-awesome>
+                    </div>
+
+                    <div id="currentMonth">{{currentMonth}} {{date.year}}
+                        <span id="todayDate" on-click="goToCurrentDate">
+                            <fa-awesome icon="fa:calendar" class="calendar-icon-todayDate"></fa-awesome>
+                        </span>
+                    </div>
+
+                    <div on-click="nextMonthHandler">
+                        <fa-awesome id="nextMonth" icon="fa:chevron-right" class="calendar-icon-right"></fa-awesome>
+                    </div>
+                </div>
+            </div>
+            <div id="mpCalendar"></div>
+        </div>
+    </template>
+
+    <script>Polymer({is:"mp-calendar",properties:{disablePrevDays:{type:Boolean,value:!1},showDaysInMonth:{type:Number,value:35},chosen:{type:Object,reflectToAttribute:!0,observer:"_handlerChosen"},firstDayOfWeek:{type:Number,value:0},dayLabels:{type:Array,value:function(){return["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},monthLabels:{type:Array,value:function(){return["January","February","March","April","May","June","July","August","September","October","November","December"]}},showDate:{type:Object,value:function(){return{year:0,month:1,day:1}},readOnly:!0},date:{type:Object,value:function(){var e=new Date;return{year:e.getFullYear(),month:e.getMonth()+1,day:null,date:e}},observer:"_dateChanged"}},ready:function(){this._makeCalendar(this.showDate.year,this.showDate.month)},attached:function(){this.$.mpCalendar.addEventListener("click",this._selectionHandler.bind(this))},detached:function(){this.$.mpCalendar.removeEventListener("click",this._selectionHandler.bind(this))},_selectionHandler:function(e){if(null!=e.target.getAttribute("data-date")){var t=e.target.getAttribute("data-date"),a=new Date(t);this.chosen=t,this.showDate.year=a.getFullYear(),this.date={year:this.showDate.year,month:a.getMonth()+1,day:a.getDate(),date:a,isoDate:t}}},_handlerChosen:function(e){var t=this,a=Polymer.dom(this.$.mpCalendar).querySelector(".selected");if(a&&a.classList.remove("selected"),""==e||null==e)this.chosen="";else{this.chosen=e;Polymer.dom(this.$.mpCalendar).querySelectorAll(".day").forEach(function(e,a){t.chosen==e.getAttribute("data-date")&&e.classList.add("selected")})}},prevMonthHandler:function(){this.set("showDate.month",this.showDate.month<=0?11:this.showDate.month-1),this.set("showDate.year",11==this.showDate.month?this.showDate.year-1:this.showDate.year),this.chosen="",this.notifyPath("date.year",this.showDate.year),this.currentMonth=this.monthLabels[this.showDate.month],this._makeCalendar(this.showDate.year,this.showDate.month),this.fire("prevMonth")},nextMonthHandler:function(){this.set("showDate.month",11==this.showDate.month?0:this.showDate.month+1),this.set("showDate.year",this.showDate.month<=0?this.showDate.year+1:this.showDate.year),this.chosen="",this.notifyPath("date.year",this.showDate.year),this.currentMonth=this.monthLabels[this.showDate.month],this._makeCalendar(this.showDate.year,this.showDate.month),this.fire("nextMonth")},_dateChanged:function(e,t){var a=new Date,s=parseInt(e.month)||1,n=parseInt(e.year)||a.getFullYear(),h=parseInt(e.day)||1;this.date.month=s,this.date.year=n,this.date.day=null!=this.date.day?h:null,this._setShowDate({month:s-1,year:n}),this.currentMonth=this.monthLabels[this.showDate.month],void 0!==t&&this.showDate.month!==t.month&&this._makeCalendar(this.showDate.year,this.showDate.month),this.fire("dateSelected",this.date),e&&t&&(e.date.getMonth()>t.date.getMonth()&&(this.fire("nextMonth"),this._makeCalendar(this.showDate.year,this.showDate.month)),e.date.getMonth()<t.date.getMonth()&&(this.fire("prevMonth"),this._makeCalendar(this.showDate.year,this.showDate.month)))},goToCurrentDate:function(){var e=new Date;this.date={date:e,day:null,month:e.getMonth()+1,year:e.getFullYear()},this._makeCalendar(this.showDate.year,this.showDate.month)},_makeCalendar:function(e,t){var a=this,s=new Date,n=s.getDate(),h=s.getMonth()+1,r=s.getFullYear(),o=(new Date(e,t,1),new Date(e,t,1).getDay()),i=Polymer.dom(this.$.mpCalendar);this.$.mpCalendar.innerHTML="";var d=document.createElement("div");d.className+="mp-cld-main";var l=document.createElement("div");l.className="mp-cld-labels";for(var m=this.dayLabels,y=0;y<m.length;y++){var c=document.createElement("span"),u=(y+this.firstDayOfWeek)%7;c.className+="mp-cld-label",c.innerHTML=m[u],l.appendChild(c)}if(d.appendChild(l),i.appendChild(d),0===t){previousMonth=11;var D=e-1}else previousMonth=t-1,D=e;if(11===t){nextMonth=0;var p=e+1}else nextMonth=t+1,p=e;var w,f=t;w=0===t?a._numberOfDays(e,12):a._numberOfDays(e,t);var v=a._numberOfDays(e,t+1),b=(a._numberOfDays(e,t+2),1),M=1,g=document.createElement("div");g.className+="mp-cld-days";for(var y=0;y<a.showDaysInMonth;y++){var C=document.createElement("span");if(y%7==0){var _=document.createElement("div");_.className+="mp-cld-week",_.setAttribute("week",y/7)}if(y<o-a.firstDayOfWeek)if(C.className+="mp-cld-day prevMonth",a.disablePrevDays)C.innerHTML+="&nbsp;",C.className+=" disabled";else{a._dayNumber(w-o+(y+1+a.firstDayOfWeek),previousMonth+1,D,C)}else if(b<=v){C.className+="mp-cld-day currMonth";a._dayNumber(b++,f+1,e,C);b-1==n&&t==h-1&&r==e&&(C.className+=" today"),b-1==this.date.day&&t==this.date.month-1&&e==this.date.year&&(C.className+=" selected")}else{C.className+="mp-cld-day nextMonth";a._dayNumber(M++,nextMonth+1,p,C)}g.appendChild(_),_.appendChild(C)}d.appendChild(g)},_numberOfDays:function(e,t){return new Date(e,t,0).getDate()},_dayNumber:function(e,t,a,s){var n=(document.createElement("span"),(e<10?"0":"")+e),h=(t<10?"0":"")+t,r=a+"-"+h+"-"+n;return s.className+=" day",s.innerHTML+=e,s.setAttribute("data-date",r),s}});</script>
+</dom-module>
+</body></html>

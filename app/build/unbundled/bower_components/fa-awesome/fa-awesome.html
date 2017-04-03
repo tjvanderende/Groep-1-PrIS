@@ -1,0 +1,127 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../neon-animation/neon-animation.html">
+<link rel="import" href="../polymer-font-awesome-icons/fa-all.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+
+
+</head><body><dom-module id="fa-awesome">
+  <style>
+    :host {
+      display: inline-block;
+    }
+
+    :host([animated]) {
+      display: none;
+    }
+
+    #label {
+      padding-left: 5px;
+    }
+
+    #label.hide {
+      display: none;
+    }
+
+    #wrap {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+    }
+
+    #wrap.reverse {
+      @apply(--layout-horizontal-reverse);
+    }
+
+    #wrap.reverse #label {
+      padding-left: 0;
+      padding-right: 5px;
+    }
+
+    #ico {
+      --iron-icon-width: var(--fa-awesome-icon-width, 24px);
+      --iron-icon-height: var(--fa-awesome-icon-height, 24px);
+    }
+
+    :host([spin]) #ico {
+      -webkit-animation: fa-spin 2s infinite linear;
+      animation: fa-spin 2s infinite linear;
+    }
+
+    :host([pulse]) #ico {
+      -webkit-animation: fa-spin 1s infinite steps(8);
+      animation: fa-spin 1s infinite steps(8);
+    }
+
+    @-webkit-keyframes fa-spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+      }
+    }
+
+    @keyframes fa-spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+      }
+    }
+
+    :host([rotate]) #ico {
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+      -webkit-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+
+    :host([rotate="180"]) #ico {
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+      -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+
+    :host([rotate="270"]) #ico {
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+      -webkit-transform: rotate(270deg);
+      -ms-transform: rotate(270deg);
+      transform: rotate(270deg);
+    }
+
+    :host([flip]) #ico, {
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);
+      -webkit-transform: scale(-1, 1);
+      -ms-transform: scale(-1, 1);
+      transform: scale(-1, 1);
+    }
+
+    :host([flip="vertical"]) #ico {
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
+      -webkit-transform: scale(1, -1);
+      -ms-transform: scale(1, -1);
+      transform: scale(1, -1);
+    }
+
+    iron-icon {
+      display: inline-block;
+    }
+  </style>
+  <template>
+    <div id="wrap">
+      <iron-icon id="ico" icon="[[icon]]" size="[[size]]"></iron-icon>
+      <span id="label">
+        <content></content>
+      </span>
+    </div>
+  </template>
+</dom-module>
+<script>Polymer({is:"fa-awesome",behaviors:[Polymer.NeonAnimationRunnerBehavior],properties:{size:{type:String,observer:"_sizeChanged"},labelLeft:{type:Boolean,observer:"_labelLeftChanged"},animated:{type:Boolean,value:!1,observer:"_animatedChanged"},visible:{type:Boolean},animationConfig:{value:function(){return{entry:[{name:"fade-in-animation",node:this},{name:"scale-up-animation",node:this}],exit:[{name:"fade-out-animation",node:this},{name:"scale-down-animation",node:this}]}}}},listeners:{"neon-animation-finish":"_onNeonAnimationFinish"},attached:function(){0==this.$.label.textContent.trim().length&&this.toggleClass("hide",!0,this.$.label)},ready:function(){this.visible&&this.animated&&this.show()},show:function(){this.animated&&(this.visible=!0,this.style.display="inline-block",this.playAnimation("entry"))},hide:function(){this.animated&&(this.visible=!1,this.playAnimation("exit"))},_sizeChanged:function(){this.size&&""!=this.size||(this.size="24"),this.$.ico.customStyle["--iron-icon-width"]=this.size+"px",this.$.ico.customStyle["--iron-icon-height"]=this.size+"px",this.$.ico.updateStyles()},_labelLeftChanged:function(i){this.toggleClass("reverse",i,this.$.wrap)},_animatedChanged:function(i,e){e||1!=i||this.playAnimation("exit")},_onNeonAnimationFinish:function(){this.visible||(this.style.display="none")}});</script>
+</body></html>

@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+
+<link rel='import' href='../../bower_components/fullcalendar/dist/fullcalendar-styles.html' />
+<link rel="import" href="../../bower_components/nebula-dialog/nebula-dialog.html">
+
+<script src='../../bower_components/jquery/dist/jquery.min.js'></script>
+<script src='../../bower_components/moment/min/moment.min.js'></script>
+<script src='../../bower_components/fullcalendar/dist/fullcalendar.js'></script>
+
+<dom-module id="my-rooster">
+    <template>
+      <style include="fullcalendar-styles">
+
+      .lesInfo{
+        min-width: 150px;
+        max-width: 400px;
+        word-wrap: break-word;
+        background-color: white;
+        padding: 10px;
+        border-radius: 15px;
+        -moz-border-radius: 15px;
+      }
+      .blue{
+        background-color: #0066cc;
+        color: white;
+      }
+      .red{
+        background-color: #990000;
+        color: white;
+      }
+    h3{
+      margin: 5px 5px 5px 5px;
+    }
+</style>
+      <div id="calendar"></div>
+      <nebula-dialog id="dialog">
+    <div class="lesInfo">
+      <h3>Informatie over vandaag</h3>
+      Vak: [[vakNaam]] <br>
+      Docent: [[vakDocent]]<br>
+      Klascode: [[klasCode]]<br>
+      Begint om: [[start]]<br>
+      Eindigt om: [[end]]<br><br>
+      <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button>
+      <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
+    </div>
+    </nebula-dialog>
+      <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'my-rooster',
+
+            properties: {
+              vakNaam: {},
+              vakDocent: {},
+              klasCode: {},
+              start: {},
+              end: {},
+            },
+
+            bekijkPresentie: function() {
+              alert("Open nu dat presentie schermpie");
+            },
+
+            closeModal: function(){
+              this.$.dialog.close();
+            },
+
+            handleResp: function(request) {
+                var self = this;
+                $(this.$.calendar).fullCalendar({
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+                    },
+                    editable: false,
+                    eventLimit: true,
+                    events: request.detail.response,
+
+                    eventClick: function(calEvent, jsEvent, view) {
+                        console.log(calEvent);
+                        self.$.dialog.show();
+                        self.vakNaam = calEvent.cursus;
+                        self.vakDocent = calEvent.docent.naam;
+                        self.klasCode = calEvent.klas.code;
+                        self.start = calEvent._start._i;
+                        self.end = calEvent._end._i;
+                    }
+                });
+            }
+
+
+        });
+    </script>
+</dom-module>

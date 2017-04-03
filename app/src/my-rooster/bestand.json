@@ -1,0 +1,29 @@
+[{
+        "title": "les1",
+        "docent": {
+            "naam": "Jos van Reenen",
+            "docentNummer": 3823838
+        },
+        "klas": {
+            "naam": "V1E",
+            "code": "TICT-V1E"
+        },
+        "start": "2017-03-29T13:30",
+        "end": "2017-03-29T15:30",
+        "cursus": "GP-15"
+    },
+    {
+        "title": "les2",
+        "docent": {
+            "naam": "Martijn Janssen",
+            "docentNummer": 1234567
+        },
+        "klas": {
+            "naam": "V1E",
+            "code": "TICT-V1E"
+        },
+        "start": "2017-03-29T08:30",
+        "end": "2017-03-29T11:30",
+        "cursus": "AUI-15"
+    }
+]

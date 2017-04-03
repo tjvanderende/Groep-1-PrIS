@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+
+<link rel="import" href="../../bower_components/nebula-dialog/nebula-dialog.html">
+<link rel="import" href="../../bower_components/iron-data-table/iron-data-table.html" />
+
+<dom-module id="my-presentie">
+    <template is="dom-bind">
+      <style is="custom-style">
+        paper-tabs[no-bar] paper-tab.iron-selected {
+          background: white;
+        }
+        .inner-tab.iron-selected {
+          background: white;
+          padding:15px;
+          min-height: 400px;
+        }
+      </style>
+
+    <nebula-dialog id="dialog">
+        <div class="wraper">
+            <div class="modalBackground">
+                <div class="elementsInModal">
+                    <h2>Test</h2>
+                </div>
+            </div>
+            <div class="lesInfo">
+                Vak: <br> Docent: <br> Klascode: <br> Begint om: <br> Eindigt om:
+            </div>
+        </div>
+    </nebula-dialog>
+    <iron-ajax url="/docent" handle-as="json" on-response="handler" auto></iron-ajax>
+
+    <paper-tabs selected="{{selected}}" scrollable no-bar>
+      <template is="dom-repeat" items="{{klassen}}">
+        <paper-tab>
+          {{item.klasNaam}}
+        </paper-tab>
+      </template>
+
+
+    </paper-tabs>
+    <iron-pages selected="{{selected}}">
+        <template is="dom-repeat" items="{{klassen}}" as="klas">
+          <div class="inner-tab">
+            <iron-data-table items="{{klas.studenten}}">
+              <data-table-column name="Email">
+                <template>[[item.email]]</template>
+              </data-table-column>
+              <data-table-column name="Nummer">
+                  <template>[[item.nummer]]</template>
+              </data-table-column>
+            </iron-data-table>
+          </div>
+        </template>
+
+
+    </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'my-presentie',
+
+            properties: {
+                selected: {
+                    type: Number,
+                    value: 0
+                }
+            },
+            handler: function(request){
+              this.klassen = request.detail.response;
+              console.log(this.klassen);
+            },
+            ready: function() {
+
+            },
+
+        });
+    </script>
+</dom-module>

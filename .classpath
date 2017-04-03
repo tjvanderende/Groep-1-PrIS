@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/tjvan/Dropbox/HBO-ICT/Propedeuse 2016-2017/Blok C/GroepProject/workspace/V1GP-startapplicatie2.1/lib/jsonfileserver-1.0.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

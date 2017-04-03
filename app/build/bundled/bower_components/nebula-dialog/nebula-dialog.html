@@ -1,0 +1,19 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="nebula-dialog-styles.html">
+<link rel="import" href="nebula-dialog-behavior.html">
+
+
+
+</head><body><dom-module id="nebula-dialog">
+  <template>
+    <style include="nebula-dialog-styles">
+      :host {
+        @apply --nebula-dialog;
+      }
+    </style>
+    <div id="dialog">
+      <slot></slot>
+    </div>
+  </template>
+  <script>Polymer({is:"nebula-dialog",behaviors:[Nebula.DialogBehavior]});</script>
+</dom-module></body></html>
