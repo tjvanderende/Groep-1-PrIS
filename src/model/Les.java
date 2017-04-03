@@ -1,10 +1,12 @@
 package model;
 
+import java.util.UUID;
+
 public class Les {
 	private String datum, startTijd, eindTijd,lokaal, cursusCode;
 	private Docent docent;
 	private Klas klas;
-	private int lesNummer;
+	private String lesNummer;
 
 	/**
 	 * ------------------
@@ -41,13 +43,7 @@ public class Les {
 	public void setCursusCode(String cursusCode) {
 		this.cursusCode = cursusCode;
 	}
-	public int getLesNummer() {
-		return lesNummer;
-	}
-	public void setLesNummer(int lesNummer) {
-		this.lesNummer = lesNummer;
-	}
-	
+
 	/**
 	 * 
 	 */
@@ -58,6 +54,7 @@ public class Les {
 		this.cursusCode = cursusCode;
 		this.setKlas(klas);
 		this.setDocent(docent);
+		this.setLesNummer(UUID.randomUUID().toString());
 	}
 	public Docent getDocent() {
 		return docent;
@@ -76,6 +73,12 @@ public class Les {
 	public String toString(){
 		return this.datum + " " + this.startTijd + " " + this.eindTijd + " klas: " + this.klas.toString()
 		+ " docent: " + this.docent.toString();
+	}
+	public String getLesNummer() {
+		return lesNummer;
+	}
+	public void setLesNummer(String lesNummer) {
+		this.lesNummer = lesNummer;
 	}
 	
 	

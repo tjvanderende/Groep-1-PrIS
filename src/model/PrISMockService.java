@@ -61,6 +61,10 @@ public class PrISMockService extends PrISService {
 		// TODO Auto-generated method stub
 		return klas;
 	}
-	
-	
+
+	@Override
+	void saveStudent(Student student) {
+
+	}
+
 }

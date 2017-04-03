@@ -32,7 +32,7 @@
         </div>
     </nebula-dialog>
     <iron-ajax url="/docent" handle-as="json" on-response="handler" auto></iron-ajax>
-
+    <iron-ajax url="/rooster/les" handle-as="json" on-response="testHandler" auto></iron-ajax>
     <paper-tabs selected="{{selected}}" scrollable no-bar>
       <template is="dom-repeat" items="{{klassen}}">
         <paper-tab>
@@ -74,6 +74,9 @@
             handler: function(request){
               this.klassen = request.detail.response;
               console.log(this.klassen);
+            },
+            testHandler:function(request){
+              console.log(request.detail.response);
             },
             ready: function() {
 

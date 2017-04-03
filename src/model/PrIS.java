@@ -52,6 +52,15 @@ public class PrIS {
 		return klassen;
 	}
 	
+	public Les getLesByNummer(String nummer){
+		Les lesByNummer = null;
+		for(Les les : this.lessen){
+			if(les.getLesNummer().equals(nummer)){
+				lesByNummer = les;
+			}
+		}
+		return lesByNummer;
+	}
 	/**
 	 * 
 	 * @param docentEmail

@@ -10,7 +10,7 @@ public class Student extends Person {
 	private String voornaam;
 	private String achternaam;
 	private String slbEmail;
-	private ArrayList<StudentPresentie> studentPresentie;
+	private ArrayList<StudentPresentie> studentPresenties = new ArrayList<StudentPresentie>();
 	public Student(
 			int studentNummer, 
 			String uname, 
@@ -22,13 +22,43 @@ public class Student extends Person {
 			String slbEmail){
 		super(uname, pword, voornaam);
 		this.setKlasNaam(klasNaam);
+		this.studentNummer = studentNummer;
 		this.decaanEmail = dEmail;
 		this.slbEmail = slbEmail;
 		
 		this.voornaam = voornaam;
 		this.achternaam = achternaam;
 	}
-	
+	/**
+	 * Haal student presentie op met lesnummer;
+	 */
+	public StudentPresentie getPresentieByLes(String lesNummer){
+		StudentPresentie presentie = null;
+		if(this.studentPresenties.size() > 0){
+			for (StudentPresentie studentPresentie : this.studentPresenties){
+				if(studentPresentie.getLesNummer().equals(lesNummer)){
+					presentie = studentPresentie;
+				} else {
+					presentie = new StudentPresentie(lesNummer, this);
+					this.addPresentie(presentie);
+				}
+			}
+		} else {
+			presentie = new StudentPresentie(lesNummer, this);
+			this.addPresentie(presentie);
+		}
+
+		return presentie;
+		
+	}
+
+	/**
+	 * Voeg nieuwe presentie toe
+	 */
+	public void addPresentie(StudentPresentie presentie){
+		this.studentPresenties.add(presentie);
+	}
+
 	/**
 	 * ---------------------
 	 * Getter en setters 

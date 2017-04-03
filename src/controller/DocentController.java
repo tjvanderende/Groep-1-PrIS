@@ -55,6 +55,7 @@ public class DocentController implements Handler {
 				JsonObjectBuilder jsonObjectStudent = Json.createObjectBuilder(); // maak het JsonObject voor een klas
 				jsonObjectStudent.add("nummer", student.getStudentNummer())
 								 .add("voornaam", student.getVoornaam())
+								 .add("studentPrecentie", student.calculatePercentage())
 								 .add("email", student.getEmail());
 				
 				studentArrayBuilder.add(jsonObjectStudent);
