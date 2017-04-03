@@ -42,7 +42,7 @@
       Klascode: [[klasCode]]<br>
       Begint om: [[start]]<br>
       Eindigt om: [[end]]<br><br>
-      <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button>
+      <paper-button class="blue" on-tap="bekijkPresentie" dat>Bekijk presentie</paper-button>
       <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
     </div>
     </nebula-dialog>
@@ -63,7 +63,8 @@
             },
 
             bekijkPresentie: function() {
-              alert("Open nu dat presentie schermpie");
+
+                console.log(les);
             },
 
             closeModal: function(){
@@ -83,6 +84,7 @@
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
+                        les = calEvent;
                         console.log(calEvent);
                         self.$.dialog.show();
                         self.vakNaam = calEvent.cursus;
