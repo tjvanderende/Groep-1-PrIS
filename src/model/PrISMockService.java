@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author tjvan
  *
  */
-public class PrISMockService extends PrISService {
+public class PrISMockService implements PrISService {
 	private String CSVfileLocation = "CSV/";
 	@Override
 	public ArrayList<Les> loadLessen() {
@@ -63,7 +63,7 @@ public class PrISMockService extends PrISService {
 	}
 
 	@Override
-	void saveStudent(Student student) {
+	public void saveStudentPresentie(StudentPresentie presentie) {
 
 	}
 

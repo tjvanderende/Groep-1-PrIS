@@ -80,14 +80,6 @@ public class Student extends Person {
 		this.slbEmail = slbEmail;
 	}
 
-	public boolean isVerwachtAfwezig() {
-		return verwachtAfwezig;
-	}
-
-	public void setVerwachtAfwezig(boolean verwachtAfwezig) {
-		this.verwachtAfwezig = verwachtAfwezig;
-	}
-
 	public String getKlasNaam() {
 		return klasNaam;
 	}

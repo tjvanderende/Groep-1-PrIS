@@ -107,6 +107,17 @@ public class PrIS {
 	public ArrayList<Les> getLessen() {
 		return lessen;
 	}
+
+	/**
+	 * Zet de presentie van een student.
+	 * Het wordt in dit stuk afgehandeld aangezien het dan gemakkelijk gekoppeld kan worden aan de PrISService.
+	 *
+	 */
+	 public void setAfwezigheid(Student student, String lesUuid, boolean afwezig ){
+	 	StudentPresentie presentie = student.getPresentieByLes(lesUuid);
+	 	presentie.setIsAfwezig(afwezig);
+	 	this.dataService.saveStudentPresentie(presentie); // "sla de student op", dit is alleen om te illustreren hoe dit wordt aangeroepen.
+	 }
 }
 
 
