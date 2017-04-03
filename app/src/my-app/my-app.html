@@ -145,6 +145,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="icons:today"></iron-icon>
             <span>(test) Instellen systeemdatum</span>
           </a>
+	  <a name="systeem_account" href$="[[_c_baseURL]]systeem/account" >
+            <iron-icon icon="icons:today"></iron-icon>
+            <span>Mijn Account</span>
+          </a>
           <a name="systeem_rooster" href$="[[_c_baseURL]]systeem/rooster" >
             <iron-icon icon="icons:today"></iron-icon>
             <span>rooster</span>
@@ -236,6 +240,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-rooster
                     rol="{{_rol}}">
             </my-rooster>
+          </paper-material>
+        </section>
+	<section name="systeem_account"
+        	title="Account"
+                element$="my-account">
+          <paper-material elevation="1">
+            <my-account>
+            </my-account>
           </paper-material>
         </section>
         <section name="systeem_presentie"
