@@ -29,7 +29,7 @@ public class PrISMockService implements PrISService {
 				String line = scanner.nextLine();
 				String[] values = line.split(",");
 				String[] getKlasNaam = values[6].split("-");
-				Docent docent = new Docent("test", "test", "test", "test");
+				Docent docent = new Docent("test", "test", "test", values[4]);
 				rooster.add(new Les(values[0], values[1], values[2], values[3], this.loadKlas(values[6], getKlasNaam[2]), docent));
 			}
 			scanner.close();

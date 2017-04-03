@@ -17,7 +17,12 @@ public class PrIS {
 		
 		// verander dit gedeelte om de data uit een andere bron te halen.
 		this.dataService = new PrISMockService();
-		this.lessen = this.loadLessenByPerson();
+        /**
+         * Haal ingelogde persoon op;
+         * else helaas geen rooster = geen data door de hele applicatie.
+         */
+
+		this.lessen = this.loadLessenByPerson(new Docent("Test", "test123", "Jos", "jos.vanreenen@hu.nl"));
 	}
 	/**
 	 * Haal een student op
@@ -27,20 +32,10 @@ public class PrIS {
 	public Student getStudent(int studentNmr) {
 		return null;
 	}
-	
-	/**
-	 * 
-	 * @param studentNmr, het studentnummer van de Student waar je de presentie van wilt bekijken.
-	 * @param lesNmr, de les waarvan je de presentie wilt bekijken.
-	 * @param aanwezig True = student is aanwezig , false = student is afwezig.
-	 */
-	public void setPresentie(int studentNmr, int lesNmr, boolean aanwezig){
-		
-	}
+
 	
 	/**
 	 * Haal via rooster alle klassen op.
-	 * @param klasNaam
 	 * @return
 	 */
 	public ArrayList<Klas> getKlassen() {
@@ -63,19 +58,27 @@ public class PrIS {
 	}
 	/**
 	 * 
-	 * @param docentEmail
 	 * @return
 	 */
-	public ArrayList<Les> loadLessenByPerson() {
-	/*	ArrayList<Les> docentLessen = new ArrayList<Les>();
+	public ArrayList<Les> loadLessenByPerson(Person person) {
+		ArrayList<Les> personLessen = new ArrayList<>();
 		for(Les les : this.dataService.loadLessen()) {
-			if(docent.test(les.getDocent())){
-				docentLessen.add(les);
-			}
+            /**
+             * Als het een docent is , gebruik de mail om de lessen op te halen.
+             */
+		    if(getSystemRole(person) == "docent"){
+                if(person.getEmail().equals(les.getDocent().getEmail())){
+                    personLessen.add(les);
+                }
+            } else if (getSystemRole(person) == "student"){
+		        Student student = (Student) person;
+		        if(person == les.getKlas().getStudentByNummer(student.getStudentNummer())){
+                    personLessen.add(les);
+                }
+            }
+
 		}
-		return this.dataService.loadLessen();*/
-		
-		return this.dataService.loadLessen();
+		return personLessen;
 	}
 
 	/**
