@@ -214,7 +214,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  title="PRESENTIELES"
               	 element$="my-presentieles">
             <paper-material elevation="1">
-              <my-presentieles uuid="{{_uuid}}">
+              <my-presentieles c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentie')]]">
               </my-presentieles>
             </paper-material>
           </section>
@@ -269,6 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       De aanwezige literal waarde wordt met enkele quotes doorgegeven
             -->
             <my-presentie
+                    c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentie')]]"
                     rol="{{_rol}}">
             </my-presentie>
           </paper-material>

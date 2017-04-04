@@ -6,13 +6,13 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../../bower_components/js-url/url.min.js"></script>
-
 <dom-module id="my-presentieles">
-    <template>
+    <template restamp="true">
         <style>
             :host {
                 display: block;
             }
+
             :root {
                 --paper-input-container-focus-color: #1a9fd9; /* kind of blue */
             }
@@ -20,55 +20,63 @@
             span {
                 @apply(--paper-font-body1);
             }
+
             .toast-button {
                 text-transform: none;
-                color: white;                           /* white tekst */
-                background: #1a9fd9;                    /* kind of blue */
-                --paper-button-ink-color: #00567B;      /* kind of dark blue */
+                color: white; /* white tekst */
+                background: #1a9fd9; /* kind of blue */
+                --paper-button-ink-color: #00567B; /* kind of dark blue */
             }
+
             .my-title {
                 font-size: 20px;
                 color: blue;
-                border-bottom: 1px solid red;           /* a red line */
-                padding-bottom: 2px;                    /* space above the border line */
+                border-bottom: 1px solid red; /* a red line */
+                padding-bottom: 2px; /* space above the border line */
             }
+
             .voornaam {
                 min-width: 100px;
                 text-align: left;
             }
+
             .achternaam {
                 min-width: 100px;
                 text-align: left;
             }
+
             .groepid-header {
                 min-width: 100px;
                 text-align: left;
             }
-            .groepid{
+
+            .groepid {
                 min-width: 100px;
             }
+
             .my-button {
-                width: 100%;                        /* full width */
-                color: white;                       /* white tekst */
-                background: #1a9fd9;                /* kind of blue */
-                --paper-button-ink-color: #00567B;  /* kind of dark blue */
-                margin-top: 5px;                    /* enlarge thet default */
-                margin-left: 0px;                   /* reduce the default */
+                width: 100%; /* full width */
+                color: white; /* white tekst */
+                background: #1a9fd9; /* kind of blue */
+                --paper-button-ink-color: #00567B; /* kind of dark blue */
+                margin-top: 5px; /* enlarge thet default */
+                margin-left: 0px; /* reduce the default */
             }
         </style>
 
         <div class="my-title">Overzicht Meldingen</div>
         <table>
             <tr>
-                <th class="voornaam">Voornaam </th>
-                <th class="achternaam">Achternaam </th>
-                <th class="meldingen">Melding </th>
-                <th class="action">Actie </th>
+                <th class="voornaam">Voornaam</th>
+                <th class="achternaam">Achternaam</th>
+                <th class="meldingen">Melding</th>
+                <th class="action">Actie</th>
             </tr>
             <template is="dom-repeat" items="[[_c_studenten]]">
                 <tr>
-                    <td class="voornaam">  <a href$="#/student/details/[[item.naam]]">[[item.naam]]</a></td>
-                    <td class="achternaam"><a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.lastName]] </a></td>
+                    <td class="voornaam"><a href$="#/student/details/[[item.naam]]">[[item.voornaam]]</a></td>
+                    <td class="achternaam"><a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.achternaam]] </a>
+                    </td>
                     <td class="melding">
                         <paper-checkbox
                                 class="my-check"
@@ -82,23 +90,25 @@
                 class="my-button"
                 on-click="_medestudenten_opslaan_request_handler">Opslaan
         </paper-button>
-        <iron-ajax url="/rooster/les?uuid=eef8a873-373e-40db-bd55-a48cdbb73df2" handle-as="json" auto on-response="_medestudenten_ophalen_response_handler"></iron-ajax>
+        <iron-ajax id="ajax_studenten_ophalen" url="/rooster/les?uuid=[[uuid]]" handle-as="json" auto
+                   on-response="_medestudenten_ophalen_response_handler"></iron-ajax>
 
 
     </template>
 
     <script>
-        $(function(){
-            uuid=$.url().split("=")[1];
-            console.log(uuid)
-        });
-        (function() {
+
+        (function () {
             Polymer({
                 is: 'my-presentieles',
 
                 properties: {
+                    uuid: {
+                        type: String,
+                        value: $.url().split("=")[1]
+                    },
                     _c_studenten: {
-                        type: Array,           /* array<student-info>: student-info = {id, firstName, lastName, sameGroup}
+                        type: Array, /* array<student-info>: student-info = {id, firstName, lastName, sameGroup}
                          array is constant groepnr is changable */
                     },
                     c_rol: {
@@ -107,69 +117,76 @@
                     c_username: {
                         type: String,
                     },
-                    c_les:{
-                      type: String,
+                    c_les: {
+                        type: String,
                     },
                     c_visible: {
-                        type: Boolean,                                      /* true when element is the active visible item */
+                        type: Boolean, /* true when element is the active visible item */
                         value: false,
-                        observer: '_initializing',                          /* wordt ook aangeroepen bijwisseling van true naar false.
+                        observer: '_initializing', /* wordt ook aangeroepen bijwisseling van true naar false.
                          regel in de functie dat er niets gebeurd
                          als c_visible false is */
                     },
                 },
 
-                _go_home: function() {
+                _go_home: function () {
                     var lApp = document.querySelector('my-app');  //het polymer element <my-app>
                     var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
-                    lAppRouter.data={page: ""};                   // vul het data attribute met de homepage url
-                                                                  // door de two way binding in <app-route> en <app-location>
-                                                                  // zal ook de url echt wijzigen
+                    lAppRouter.data = {page: ""};                   // vul het data attribute met de homepage url
+                                                                    // door de two way binding in <app-route> en <app-location>
+                                                                    // zal ook de url echt wijzigen
                 },
 
-                _initializing : function() {
-                    if (this.c_visible) {                                 // zodra zichtbaar geworden moet er wat worden gedaan
-                        if (this.c_rol=="docent") {                        // voor studenten
-                            this._studenten_ophalen_les_handler();    //    haal info op van server
-                        } else {                                            // na handmatige url wijziging zonder login
-                            var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
-                            this._go_home();
-                            /* terug naar home page */
-                        }
+                _initializing: function () {
+                    if (this.c_visible) {
+                        //this.c_rol = "docent";
+                        // zodra zichtbaar geworden moet er wat worden gedaan
+//                        if (this.c_rol == "docent") {                        // voor studenten
+//                            this._studenten_ophalen_les_handler();    //    haal info op van server
+//                        } else {                                            // na handmatige url wijziging zonder login
+//                            var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
+//                            this._go_home();
+//                            /* terug naar home page */
+//                        }
+                        console.log(this._c_studenten);
+                        this.$.ajax_studenten_ophalen.generateRequest();
+                        console.log(this._c_studenten);
+
                     }
                 },
 
-                _studenten_ophalen_les_request_handler: function() {
-                    console.log("_studenten_ophalen_les_request_handler user="+this.c_username);
-                    this.$.ajax_medestudenten_ophalen.contentType="application/json";
-                    this.$.ajax_medestudenten_ophalen.body={
-                        "username":this.c_username
+                _studenten_ophalen_les_request_handler: function () {
+                    console.log("_studenten_ophalen_les_request_handler user=" + this.c_username);
+                    this.$.ajax_medestudenten_ophalen.contentType = "application/json";
+                    this.$.ajax_medestudenten_ophalen.body = {
+                        "username": this.c_username
 //                        moet les ophalen met les id en
                     };
                     this.$.ajax_medestudenten_ophalen.generateRequest();
                 },
 
-                _medestudenten_ophalen_response_handler: function(request) {
-                    console.log("_mededestudenten_ophalen_response_handler aantal studenten="+request.detail.response.length);
+                _medestudenten_ophalen_response_handler: function (request) {
+                    console.log("_mededestudenten_ophalen_response_handler aantal studenten=" + request.detail.response.length);
                     this._c_studenten = request.detail.response;
                 },
 
-                _medestudenten_opslaan_request_handler: function() {
-                    console.log("_medestudenten_opslaan_request_handler user="+this.c_username);
-                    this.$.ajax_medestudenten_opslaan.contentType="application/json";
-                    this.$.ajax_medestudenten_opslaan.body={
-                        "username":this.c_username,
+                _medestudenten_opslaan_request_handler: function () {
+                    console.log("_medestudenten_opslaan_request_handler user=" + this.c_username);
+                    this.$.ajax_medestudenten_opslaan.contentType = "application/json";
+                    this.$.ajax_medestudenten_opslaan.body = {
+                        "username": this.c_username,
                         "groupMembers": this._c_studenten
                     };
                     this.$.ajax_medestudenten_opslaan.generateRequest();
                 },
 
-                _medestudenten_opslaan_response_handler: function(request) {
-                    console.log("_mededestudenten_opslaan_response_handler errorcode="+request.detail.response.errorcode);
-                    this._go_home();		/* verlaat de pagina en ga terug naar home page */
+                _medestudenten_opslaan_response_handler: function (request) {
+                    console.log("_mededestudenten_opslaan_response_handler errorcode=" + request.detail.response.errorcode);
+                    this._go_home();
+                    /* verlaat de pagina en ga terug naar home page */
                 },
 
-                _toast_clicked: function(e) {
+                _toast_clicked: function (e) {
                     var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
                     lToast.toggle();
                 },
