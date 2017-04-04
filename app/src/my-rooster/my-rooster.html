@@ -46,7 +46,7 @@
       <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
     </div>
     </nebula-dialog>
-      <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
+      <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
 
     <script>
@@ -64,7 +64,7 @@
 
             bekijkPresentie: function() {
 
-                console.log(les);
+                console.log(les.uuid);
             },
 
             closeModal: function(){
