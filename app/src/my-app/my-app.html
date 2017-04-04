@@ -210,23 +210,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-material>
         </section>
 
-        <section name="systeem_instellen_systeemdatum"
-                 title="INSTELLEN SYSTEEMDATUM"
-              	 element$="my-systeemdatum">
+        <section name="systeem_presentieles"
+                 title="PRESENTIELES"
+              	 element$="my-presentieles">
             <paper-material elevation="1">
-              <!--
-                c_visible="true" als deze section geselecteerd is.
-                LET OP: boolean values moeten als string doorgegeven worden,
-                        vandaar de quotes rondom de function aanroep.
-                        De aanwezige literal waarde wordt met enkele quotes doorgegeven
-              -->
-              <my-systeemdatum
-                systeemdatumlokaal="{{_systeemdatumlokaal}}"
-                systeemdatumstandaard="{{_systeemdatumstandaard}}"
-                c_visible="[[_are_strings_equal(_ar_page, 'systeem_instellen_systeemdatum')]]">
-              </my-systeemdatum>
+              <my-presentieles uuid="{{_uuid}}">
+              </my-presentieles>
             </paper-material>
           </section>
+        <section name="systeem_instellen_systeemdatum"
+                 title="INSTELLEN SYSTEEMDATUM"
+                 element$="my-systeemdatum">
+          <paper-material elevation="1">
+            <!--
+              c_visible="true" als deze section geselecteerd is.
+              LET OP: boolean values moeten als string doorgegeven worden,
+                      vandaar de quotes rondom de function aanroep.
+                      De aanwezige literal waarde wordt met enkele quotes doorgegeven
+            -->
+            <my-systeemdatum
+                    systeemdatumlokaal="{{_systeemdatumlokaal}}"
+                    systeemdatumstandaard="{{_systeemdatumstandaard}}"
+                    c_visible="[[_are_strings_equal(_ar_page, 'systeem_instellen_systeemdatum')]]">
+            </my-systeemdatum>
+          </paper-material>
+        </section>
         <section name="systeem_rooster"
                  title="Rooster"
                  element$="my-rooster">

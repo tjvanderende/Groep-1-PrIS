@@ -63,14 +63,12 @@
             },
 
             bekijkPresentie: function() {
-
-                console.log(les.uuid);
+                window.location.replace("/#/systeem/presentieles/?uuid="+les.uuid);
             },
 
             closeModal: function(){
               this.$.dialog.close();
             },
-
             handleResp: function(request) {
                 console.log(request.detail.response);
                 var self = this;
