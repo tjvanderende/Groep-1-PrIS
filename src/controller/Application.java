@@ -34,6 +34,9 @@ public class Application {
 		RoosterController roosterController = new RoosterController(infoSysteem);
 		DocentController docentController = new DocentController(infoSysteem);
 		server.registerHandler("/rooster", roosterController);
+		server.registerHandler("/rooster/les", roosterController);
+		server.registerHandler("/rooster/les/edit", roosterController);
+
 		server.registerHandler("/docent", docentController);
 		//server.registerHandler("/login", loginController);
 		server.start();

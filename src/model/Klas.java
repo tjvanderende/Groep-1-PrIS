@@ -48,4 +48,13 @@ public class Klas {
 		return isGelijk;
 		
 	}
+	public Student getStudentByNummer(int studentNmmr){
+		Student studentByNmmr = null;
+		for(Student student : this.studenten){
+			if(student.getStudentNummer() == studentNmmr){
+				studentByNmmr = student;
+			}
+		}
+		return studentByNmmr;
+	}
 }

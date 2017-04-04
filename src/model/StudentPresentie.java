@@ -3,9 +3,10 @@ package model;
 public class StudentPresentie {
 	private boolean isPresent;
 	private boolean isAfwezig;
+	private String lesNummer; 
+	public StudentPresentie(String lesNmr, Student student){
+		this.setLesNummer(lesNmr);
 	
-	public StudentPresentie(int lesNmr, Student std){
-		
 	}
 	
 	public boolean getIsPresent() {
@@ -19,6 +20,14 @@ public class StudentPresentie {
 	}
 	public void setIsAfwezig(boolean isAfwezig) {
 		this.isAfwezig = isAfwezig;
+	}
+
+	public String getLesNummer() {
+		return lesNummer;
+	}
+
+	public void setLesNummer(String lesNummer) {
+		this.lesNummer = lesNummer;
 	}
 	
 }
