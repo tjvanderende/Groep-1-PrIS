@@ -29,7 +29,7 @@ public class PrISMockService implements PrISService {
 				String line = scanner.nextLine();
 				String[] values = line.split(",");
 				String[] getKlasNaam = values[6].split("-");
-				Docent docent = new Docent("test", "test", "test", values[4]);
+				Docent docent = new Docent(values[4], "test", "test", values[4]);
 				rooster.add(new Les(values[0], values[1], values[2], values[3], this.loadKlas(values[6], getKlasNaam[2]), docent));
 			}
 			scanner.close();
@@ -50,7 +50,7 @@ public class PrISMockService implements PrISService {
 			while(scanner.hasNextLine()){
 				String line = scanner.nextLine();
 				String[] values = line.split(",");
-				klas.addStudent(new Student(Integer.parseInt(values[0]), values[1], values[1]+"123", values[3], values[2], values[1], klasNaam, "", "jos.reenen@hu.nl"));
+				klas.addStudent(new Student(Integer.parseInt(values[0]), values[1], values[3]+"123", values[3], values[2], values[1], klasNaam, "", "jos.reenen@hu.nl"));
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {

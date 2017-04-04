@@ -102,7 +102,6 @@ public class RoosterController implements Handler {
 			/**
 			 * Toon fout melding.
 			 */
-			String lJsonOutStr = "test";
 			conversation.sendJSONMessage(new Error("Niet alle parameters die nodig zijn, zijn meegegeven", 500).make());
 		}
 		String lJsonOutStr = presentieArray.build().toString();

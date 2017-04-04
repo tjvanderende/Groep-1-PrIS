@@ -33,11 +33,29 @@ public class Application {
 		
 		RoosterController roosterController = new RoosterController(infoSysteem);
 		DocentController docentController = new DocentController(infoSysteem);
+		LoginController loginController = new LoginController(infoSysteem);
+		PersonController personController = new PersonController(infoSysteem);
+
 		server.registerHandler("/rooster", roosterController);
 		server.registerHandler("/rooster/les", roosterController);
 		server.registerHandler("/rooster/les/edit", roosterController);
 
+		/**
+		 * Haal klas presenties op.
+		 */
 		server.registerHandler("/docent", docentController);
+
+		/**
+		 * Loguit / login routes.
+		 */
+		server.registerHandler("/login", loginController);
+		server.registerHandler("/logout", loginController);
+
+
+		/**
+		 * Person routes
+		 */
+		server.registerHandler("/student", personController);
 		//server.registerHandler("/login", loginController);
 		server.start();
 	}

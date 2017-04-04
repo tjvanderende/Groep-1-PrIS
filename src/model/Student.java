@@ -9,6 +9,7 @@ public class Student extends Person {
 	private int studentNummer;
 	private String voornaam;
 	private String achternaam;
+	private String password;
 	private String tussenvoegsel;
 	private String slbEmail;
 	private ArrayList<StudentPresentie> studentPresenties = new ArrayList<StudentPresentie>();
@@ -28,7 +29,7 @@ public class Student extends Person {
 		this.tussenvoegsel = tussenvoegsel;
 		this.decaanEmail = dEmail;
 		this.slbEmail = slbEmail;
-		
+		this.password = pword;
 		this.voornaam = voornaam;
 		this.achternaam = achternaam;
 	}
@@ -91,11 +92,16 @@ public class Student extends Person {
 		this.klasNaam = klasNaam;
 	}
 
-
+	@Override
 	public String getEmail(){
 		return (this.voornaam + "." + this.achternaam).toLowerCase() + "@student.hu.nl";
 	}
-	
+
+	@Override
+	protected String getPassword() {
+		return this.password;
+	}
+
 
 	public int getStudentNummer() {
 		return studentNummer;

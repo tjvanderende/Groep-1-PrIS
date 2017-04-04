@@ -34,8 +34,8 @@ public abstract class Person {
 
 
 
-	abstract String getEmail();
-
+	protected abstract String getEmail();
+	protected abstract String getPassword();
 
 	public String getUsername() {
 		return username;
