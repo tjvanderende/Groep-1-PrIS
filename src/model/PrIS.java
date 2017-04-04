@@ -82,6 +82,13 @@ public class PrIS {
 	}
 
 	/**
+	 * Validate login gegevens (Gebruikersnaam / wachtwoord).
+	 * @return true als gegevens juist zijn.
+	 */
+	public boolean validateLoginInfo(){
+		return false;
+	}
+	/**
 	 * 
 	 * @param docentEmail
 	 * @return

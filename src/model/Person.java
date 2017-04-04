@@ -1,11 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+
 public abstract class Person {
 	private String username;
 	private String voornaam;
 	private String achternaam;
 	private String password;
-	protected PersonRole roles;
+	protected ArrayList<PersonRole> roles = new ArrayList<>();
 	public Person(String uname, String pword, String voornaam){
 		this.setUsername(uname);
 		this.password = pword;
@@ -22,8 +24,8 @@ public abstract class Person {
 		
 	}
 	
-	public void isRole(){
-		
+	public boolean isRole(){
+		return true;
 	}
 	
 	public String toString(){
@@ -57,15 +59,4 @@ public abstract class Person {
 		this.voornaam = voornaam;
 	}
 
-
-
-	public String getAchternaam() {
-		return achternaam;
-	}
-
-
-
-	public void setAchternaam(String achternaam) {
-		this.achternaam = achternaam;
-	}
 }

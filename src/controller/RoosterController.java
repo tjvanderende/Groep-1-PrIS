@@ -90,8 +90,8 @@ public class RoosterController implements Handler {
 				jsonObjectPresentie.add("aanwezig", presentie.getIsAfwezig())
 				   				   .add("verwachtAfwezig", presentie.getIsPresent());
 				jsonObjectStudent.add("nummer", student.getStudentNummer())
-						         .add("naam", student.getVoornaam())
-								 .add("voornaam", student.getEmail())
+						         .add("email", student.getEmail())
+								 .add("voornaam", student.getVoornaam())
 								 .add("presentie", jsonObjectPresentie);
 				presentieArray.add(jsonObjectStudent);
 			}
