@@ -24,7 +24,7 @@ public abstract class Person {
 		
 	}
 	
-	public boolean isRole(){
+	public boolean isRole(String roleName){
 		return true;
 	}
 	

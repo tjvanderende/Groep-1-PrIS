@@ -50,7 +50,7 @@ public class PrISMockService implements PrISService {
 			while(scanner.hasNextLine()){
 				String line = scanner.nextLine();
 				String[] values = line.split(",");
-				klas.addStudent(new Student(Integer.parseInt(values[0]), values[1], values[1]+"123", values[1], values[2], klasNaam, "", "jos.reenen@hu.nl"));
+				klas.addStudent(new Student(Integer.parseInt(values[0]), values[1], values[1]+"123", values[3], values[2], values[1], klasNaam, "", "jos.reenen@hu.nl"));
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {

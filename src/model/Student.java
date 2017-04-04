@@ -9,13 +9,15 @@ public class Student extends Person {
 	private int studentNummer;
 	private String voornaam;
 	private String achternaam;
+	private String tussenvoegsel;
 	private String slbEmail;
 	private ArrayList<StudentPresentie> studentPresenties = new ArrayList<StudentPresentie>();
 	public Student(
 			int studentNummer, 
 			String uname, 
 			String pword,
-			String voornaam, 
+			String voornaam,
+			String tussenvoegsel,
 			String achternaam, 
 			String klasNaam, 
 			String dEmail, 
@@ -23,6 +25,7 @@ public class Student extends Person {
 		super(uname, pword, voornaam);
 		this.setKlasNaam(klasNaam);
 		this.studentNummer = studentNummer;
+		this.tussenvoegsel = tussenvoegsel;
 		this.decaanEmail = dEmail;
 		this.slbEmail = slbEmail;
 		
@@ -105,5 +108,16 @@ public class Student extends Person {
 	public double calculatePercentage(){
 		return 30.0;
 	}
-	
+
+	public String getAchternaam() {
+		return this.tussenvoegsel + " "+achternaam;
+	}
+
+	public String getTussenvoegsel() {
+		return tussenvoegsel;
+	}
+
+	public void setTussenvoegsel(String tussenvoegsel) {
+		this.tussenvoegsel = tussenvoegsel;
+	}
 }

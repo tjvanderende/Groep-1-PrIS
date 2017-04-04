@@ -76,7 +76,7 @@ public class RoosterController implements Handler {
      * @param conversation
      */
 	private void ophalenLesPresentie(Conversation conversation) throws NullPointerException{
-		String uuid = (String) conversation.getParameter("uuid");
+		String uuid = conversation.getParameter("uuid");
     	Les les = informatieSysteem.getLesByNummer(uuid);
 
 		JsonArrayBuilder presentieArray = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
@@ -92,6 +92,7 @@ public class RoosterController implements Handler {
 				jsonObjectStudent.add("nummer", student.getStudentNummer())
 						         .add("email", student.getEmail())
 								 .add("voornaam", student.getVoornaam())
+								 .add("achternaam", student.getAchternaam())
 								 .add("presentie", jsonObjectPresentie);
 				presentieArray.add(jsonObjectStudent);
 			}
