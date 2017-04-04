@@ -32,6 +32,7 @@
     h3{
       margin: 5px 5px 5px 5px;
     }
+
 </style>
       <div id="calendar"></div>
       <nebula-dialog id="dialog">
@@ -46,6 +47,7 @@
       <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
     </div>
     </nebula-dialog>
+
       <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
 
@@ -55,19 +57,29 @@
             is: 'my-rooster',
 
             properties: {
-              vakNaam: {},
-              vakDocent: {},
-              klasCode: {},
-              start: {},
-              end: {},
+                vakNaam: {},
+                vakDocent: {},
+                klasCode: {},
+                start: {},
+                end: {},
+            },
+            listeners: {
+                'request': 'ajaxRequest',
+                'response': 'ajaxResponse'
             },
 
             bekijkPresentie: function() {
-              alert("Open nu dat presentie schermpie");
+                alert("Open nu dat presentie schermpie");
             },
 
-            closeModal: function(){
-              this.$.dialog.close();
+            closeModal: function() {
+                this.$.dialog.close();
+            },
+            ajaxRequest: function() {
+                $("#loader1").css("display", "block");
+            },
+            ajaxResponse: function() {
+                $("#loader1").css("display", "none");
             },
 
             handleResp: function(request) {
@@ -83,7 +95,6 @@
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
-                        console.log(calEvent);
                         self.$.dialog.show();
                         self.vakNaam = calEvent.cursus;
                         self.vakDocent = calEvent.docent.naam;
