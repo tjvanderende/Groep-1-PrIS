@@ -125,7 +125,7 @@ public class RoosterController implements Handler {
 			jsonObjectLes.add("start",les.getDatum()+ "T"+les.getStartTijd()) // "2017-03-30T11:30";
 						 .add("end", les.getDatum()+ "T"+ les.getEindTijd())
 						 .add("uuid", les.getLesNummer())
-						 .add("cursus", les.getCursusCode())
+						 .add("title", les.getCursusCode())
 						 .add("docent", jsonObjectDocent)
 						 .add("klas", jsonObjectKlas);
 			
