@@ -46,7 +46,7 @@
       <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
     </div>
     </nebula-dialog>
-      <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
+      <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
 
     <script>
@@ -63,15 +63,14 @@
             },
 
             bekijkPresentie: function() {
-
-                console.log(les);
+                window.location.replace("/#/systeem/presentieles/?uuid="+les.uuid);
             },
 
             closeModal: function(){
               this.$.dialog.close();
             },
-
             handleResp: function(request) {
+                console.log(request.detail.response);
                 var self = this;
                 $(this.$.calendar).fullCalendar({
                     header: {
@@ -87,9 +86,9 @@
                         les = calEvent;
                         console.log(calEvent);
                         self.$.dialog.show();
-                        self.vakNaam = calEvent.cursus;
-                        self.vakDocent = calEvent.docent.naam;
-                        self.klasCode = calEvent.klas.code;
+                        self.vakNaam = calEvent.title;
+                        self.vakDocent = calEvent.docent.voornaam;
+                        self.klasCode = calEvent.klas.klascode;
                         self.start = calEvent._start._i;
                         self.end = calEvent._end._i;
                     }

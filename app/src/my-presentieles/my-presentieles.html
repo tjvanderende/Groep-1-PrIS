@@ -4,6 +4,8 @@
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/js-url/url.min.js"></script>
 
 <dom-module id="my-presentieles">
     <template>
@@ -65,7 +67,7 @@
             </tr>
             <template is="dom-repeat" items="[[_c_studenten]]">
                 <tr>
-                    <td class="voornaam">  <a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.firstName]]</a></td>
+                    <td class="voornaam">  <a href$="#/student/details/[[item.naam]]">[[item.naam]]</a></td>
                     <td class="achternaam"><a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.lastName]] </a></td>
                     <td class="melding">
                         <paper-checkbox
@@ -80,22 +82,19 @@
                 class="my-button"
                 on-click="_medestudenten_opslaan_request_handler">Opslaan
         </paper-button>
+        <iron-ajax url="/rooster/les?uuid=eef8a873-373e-40db-bd55-a48cdbb73df2" handle-as="json" auto on-response="_medestudenten_ophalen_response_handler"></iron-ajax>
 
-        <iron-ajax
-                id="ajax_medestudenten_ophalen"
-                method="POST"
-                url="/student/medestudenten/ophalen"
-                handle-as="json"
-                on-response="_medestudenten_ophalen_response_handler">
-        </iron-ajax>
 
     </template>
 
     <script>
+        $(function(){
+            uuid=$.url().split("=")[1];
+            console.log(uuid)
+        });
         (function() {
-            'use strict';
             Polymer({
-                is: 'my-meldingen',
+                is: 'my-presentieles',
 
                 properties: {
                     _c_studenten: {
