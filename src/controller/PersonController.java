@@ -1,5 +1,6 @@
 package controller;
 
+import model.Person;
 import model.PrIS;
 import model.Student;
 import server.Conversation;
@@ -20,10 +21,20 @@ public class PersonController implements Handler {
     public void handle(Conversation conversation) {
         if(conversation.getRequestedURI().startsWith("/student")){
             this.getStudentByNummer(conversation);
+        } else if (conversation.getRequestedURI().startsWith("/person/me")) {
+            this.getLoggedInPerson(conversation);
         }
     }
 
     private void getLoggedInPerson(Conversation conversation){
+        JsonObjectBuilder personObject = Json.createObjectBuilder();
+        if(informatieSysteem.isLoggedIn()) {
+            Person person = informatieSysteem.getLoggedInPerson();
+            personObject.add("rol", informatieSysteem.getSystemRole(person));
+            conversation.sendJSONMessage(personObject.build().toString());
+        } else {
+            conversation.sendJSONMessage(new Error("Je moet ingelogd zijn", 500).make());
+        }
 
     }
     private void getStudentByNummer(Conversation conversation){

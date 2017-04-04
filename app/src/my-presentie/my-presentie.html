@@ -32,7 +32,6 @@
         </div>
     </nebula-dialog>
     <iron-ajax url="/docent" handle-as="json" on-response="handler" auto></iron-ajax>
-    <iron-ajax url="/rooster/les" handle-as="json" on-response="testHandler" auto></iron-ajax>
     <paper-tabs selected="{{selected}}" scrollable no-bar>
       <template is="dom-repeat" items="{{klassen}}">
         <paper-tab>
@@ -45,13 +44,16 @@
     <iron-pages selected="{{selected}}">
         <template is="dom-repeat" items="{{klassen}}" as="klas">
           <div class="inner-tab">
-            <iron-data-table items="{{klas.studenten}}">
+            <iron-data-table id="presentielijst" items="{{klas.studenten}}" selection-enabled>
               <data-table-column name="Email">
                 <template>[[item.email]]</template>
               </data-table-column>
               <data-table-column name="Nummer">
                   <template>[[item.nummer]]</template>
               </data-table-column>
+                <data-table-column name="Percentage">
+                    <template>[[item.studentPrecentie]]</template>
+                </data-table-column>
             </iron-data-table>
           </div>
         </template>
@@ -61,27 +63,34 @@
     </template>
 
     <script>
-        Polymer({
+            Polymer({
 
-            is: 'my-presentie',
+                is: 'my-presentie',
 
-            properties: {
-                selected: {
-                    type: Number,
-                    value: 0
-                }
-            },
-            handler: function(request){
-              this.klassen = request.detail.response;
-              console.log(this.klassen);
-            },
-            testHandler:function(request){
-              console.log(request.detail.response);
-            },
-            ready: function() {
+                properties: {
+                    selected: {
+                        type: Number,
+                        value: 0
+                    }
+                },
+                handler: function(request){
+                    this.klassen = request.detail.response;
 
-            },
+                 /*   var table = this.$.presentielijst;
 
-        });
+                    table.addEventListener('selecting-item', function(e) {
+                        e.preventDefault(); // this will cancel the default selection behavior
+
+                    });*/
+                },
+                testHandler:function(request){
+                    console.log(request.detail.response);
+                },
+                ready: function() {
+
+                },
+
+            });
+
     </script>
 </dom-module>

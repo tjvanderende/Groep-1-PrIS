@@ -15,7 +15,7 @@
     </style>
 
     <paper-button raised on-click="_logout_clicked">Klik hier als je zeker weet dat je echt wilt uitloggen</paper-button>
-
+    <iron-ajax id="ajax_logout" url="/logout" on-response="_logout_response"></iron-ajax>
   </template>
 
   <script>
@@ -38,18 +38,19 @@
         },
 
         _logout_clicked: function() {
-          console.log("_logout_clicked");
-          this.rol = "undefined";
-          this._go_home();
+            this.$.ajax_logout.generateRequest();
+
          },
         
-        _go_home: function() {
-          var lApp = document.querySelector('my-app');  //het polymer element <my-app>
-          var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
-          lAppRouter.data={page: ""};                   // vul het data attribute met de homepage url
-                                                        // door de two way binding in <app-route> en <app-location>
-                                                        // zal ook de url echt wijzigen
-         },
+        _logout_response: function(request) {
+            var response = request.detail.response;
+            if(response.status != 500){
+                this.rol = "undefined";
+                var lApp = document.querySelector('my-app');  //het polymer element <my-app>
+                var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
+                lAppRouter.data={page: ""};
+            }
+         }
       });
     })();
   </script>

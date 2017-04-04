@@ -56,6 +56,7 @@ public class Application {
 		 * Person routes
 		 */
 		server.registerHandler("/student", personController);
+		server.registerHandler("/person/me", personController);
 		//server.registerHandler("/login", loginController);
 		server.start();
 	}

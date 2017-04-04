@@ -50,30 +50,30 @@ public class DocentController implements Handler {
 		ArrayList<Klas> klassen = this.informationSystem.getKlassen();
 		JsonArrayBuilder klasArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
 		JsonArrayBuilder studentArrayBuilder = Json.createArrayBuilder();
-		for(Klas klas : klassen){
-			for(Student student: klas.getStudenten()){
-				JsonObjectBuilder jsonObjectStudent = Json.createObjectBuilder(); // maak het JsonObject voor een klas
-				jsonObjectStudent.add("nummer", student.getStudentNummer())
-								 .add("voornaam", student.getVoornaam())
-								 .add("studentPrecentie", student.calculatePercentage())
-								 .add("achternaam", student.getAchternaam())
-								 .add("email", student.getEmail());
-				
-				studentArrayBuilder.add(jsonObjectStudent);
-				
+		if(this.informationSystem.getSystemRole(this.informationSystem.getLoggedInPerson()) == "docent") {
+			for (Klas klas : klassen) {
+				for (Student student : klas.getStudenten()) {
+					JsonObjectBuilder jsonObjectStudent = Json.createObjectBuilder(); // maak het JsonObject voor een klas
+					jsonObjectStudent.add("nummer", student.getStudentNummer())
+							.add("voornaam", student.getVoornaam())
+							.add("studentPrecentie", student.calculatePercentage())
+							.add("achternaam", student.getAchternaam())
+							.add("email", student.getEmail());
+
+					studentArrayBuilder.add(jsonObjectStudent);
+
+				}
+				JsonObjectBuilder jsonObjectKlas = Json.createObjectBuilder(); // maak het JsonObject voor een klas
+				jsonObjectKlas.add("klasCode", klas.getKlasCode())
+						.add("klasNaam", klas.getKlasNaam())
+						.add("studenten", studentArrayBuilder);
+				klasArrayBuilder.add(jsonObjectKlas);
 			}
-			JsonObjectBuilder jsonObjectKlas = Json.createObjectBuilder(); // maak het JsonObject voor een klas
-			jsonObjectKlas.add("klasCode", klas.getKlasCode())
-						  .add("klasNaam", klas.getKlasNaam())
-						  .add("studenten", studentArrayBuilder);
-			klasArrayBuilder.add(jsonObjectKlas);
+
+			String lJsonOutStr = klasArrayBuilder.build().toString();                                                // maak er een string van
+			conversation.sendJSONMessage(lJsonOutStr);
+		} else {
+			conversation.sendJSONMessage(new Error("Je moet docent zijn om deze pagina te kunnen bekijken", 500).make());
 		}
-
-		String lJsonOutStr = klasArrayBuilder.build().toString();												// maak er een string van
-		conversation.sendJSONMessage(lJsonOutStr);	
-
 	}
-
-	
-	
 }
