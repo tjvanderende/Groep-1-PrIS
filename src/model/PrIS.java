@@ -110,7 +110,11 @@ public class PrIS {
 	 	this.dataService.saveStudentPresentie(presentie); // "sla de student op", dit is alleen om te illustreren hoe dit wordt aangeroepen.
 	 }
 
-
+	 public void setPresentie(boolean present){
+	 	StudentPresentie presentie = student.getPresentieByLes(lesUuid);
+	 	presentie.setIsPresent(present);
+	 	this.dataService.saveStudentPresentie(presentie);
+	 }
 
 	/**
 	 * Login afhandelings helpers komen hier.

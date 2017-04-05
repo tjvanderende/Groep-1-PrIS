@@ -35,7 +35,7 @@ public class Application {
 		DocentController docentController = new DocentController(infoSysteem);
 		LoginController loginController = new LoginController(infoSysteem);
 		PersonController personController = new PersonController(infoSysteem);
-
+		MeldingenController meldingenController = new MeldingenController(infoSysteem);
 		server.registerHandler("/rooster", roosterController);
 		server.registerHandler("/rooster/les", roosterController);
 		server.registerHandler("/rooster/les/edit", roosterController);
@@ -58,6 +58,11 @@ public class Application {
 		server.registerHandler("/student", personController);
 		server.registerHandler("/person/me", personController);
 		//server.registerHandler("/login", loginController);
+
+		/**
+		 * Meldingen
+		 */
+		server.registerHandler("/meldingen", meldingenController);
 		server.start();
 	}
 }

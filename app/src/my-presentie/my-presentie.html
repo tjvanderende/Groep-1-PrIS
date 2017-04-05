@@ -54,7 +54,11 @@
                 <data-table-column name="Percentage">
                     <template>[[item.studentPrecentie]]</template>
                 </data-table-column>
+                <data-table-column name="Selecteer">
+                    <template><a on-tap="load_student" href="/#/systeem/account/?student={{item.nummer}}">selecteer</a></template>
+                </data-table-column>
             </iron-data-table>
+
           </div>
         </template>
 
@@ -71,7 +75,15 @@
                     selected: {
                         type: Number,
                         value: 0
+                    },
+                    studentNummer: {
+                        type: Number,
+                        value: 0,
+                        notify: true
                     }
+                },
+                load_student: function(e){
+                  console.log(e.target);
                 },
                 handler: function(request){
                     this.klassen = request.detail.response;

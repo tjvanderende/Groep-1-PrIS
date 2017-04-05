@@ -12,6 +12,8 @@ public class Student extends Person {
 	private String password;
 	private String tussenvoegsel;
 	private String slbEmail;
+	private String studentStatus;
+	private String studentStatusToelichting;
 	private ArrayList<StudentPresentie> studentPresenties = new ArrayList<StudentPresentie>();
 	public Student(
 			int studentNummer, 
@@ -32,6 +34,16 @@ public class Student extends Person {
 		this.password = pword;
 		this.voornaam = voornaam;
 		this.achternaam = achternaam;
+	}
+	public void voegStudentStatusToe(String status, String toelichting){
+		this.studentStatus = status;
+		this.studentStatusToelichting = toelichting;
+	}
+	public String getStudentStatusToelichting(){
+		return this.studentStatusToelichting;
+	}
+	public String getStudentStatus(){
+		return this.studentStatus;
 	}
 	/**
 	 * Haal student presentie op met lesnummer;

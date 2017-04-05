@@ -12,10 +12,11 @@ public abstract class Person {
 		this.setUsername(uname);
 		this.password = pword;
 		this.voornaam = voornaam;
+		roles.add(new PersonRole("decaan"));
+		roles.add(new PersonRole("slb"));
 	}
 	
-	
-	
+
 	protected void login(){
 		
 	}
@@ -25,9 +26,15 @@ public abstract class Person {
 	}
 	
 	public boolean isRole(String roleName){
-		return true;
+		boolean rolEqual = false;
+		for (PersonRole presentie: roles) {
+			if(presentie.getName().equals(roleName)){
+				rolEqual = true;
+			}
+		}
+		return rolEqual;
 	}
-	
+
 	public String toString(){
 		return this.username + this.password;
 	}

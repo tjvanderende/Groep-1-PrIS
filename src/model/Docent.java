@@ -24,4 +24,7 @@ public class Docent extends Person {
 	protected String getPassword() {
 		return this.password;
 	}
+
+	public void getExtraRole(){
+	}
 }

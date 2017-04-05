@@ -145,6 +145,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Mijn Account</span>
                     </a>
+                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
+                        <iron-icon icon="icons:today"></iron-icon>
+                        <span>Meldingen</span>
+                    </a>
                     <a name="systeem_rooster" href$="[[_c_baseURL]]systeem/rooster"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>rooster</span>
@@ -209,6 +213,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </my-presentieles>
                     </paper-material>
                 </section>
+                <section name="systeem_meldingen"
+                         title="Meldingen"
+                         element$="my-meldingen">
+                    <paper-material elevation="1">
+                        <my-presentieles>
+                        </my-presentieles>
+                    </paper-material>
+                </section>
                 <section name="systeem_instellen_systeemdatum"
                          title="INSTELLEN SYSTEEMDATUM"
                          element$="my-systeemdatum">
@@ -245,7 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="Account"
                          element$="my-account">
                     <paper-material elevation="1">
-                        <my-account rol="{{_rol}}">>
+                        <my-account data="_ar_subsubroute_data" rol="{{_rol}}">>
                         </my-account>
                     </paper-material>
                 </section>
@@ -336,6 +348,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     _c_baseURL: {
                         type: String,
                         value: "/#/",
+                    },
+                    studentNummer: {
+                        type:String
                     },
                     _rol: {
                         type: String,
