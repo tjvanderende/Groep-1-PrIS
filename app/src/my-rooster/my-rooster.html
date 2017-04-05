@@ -32,6 +32,7 @@
     h3{
       margin: 5px 5px 5px 5px;
     }
+
 </style>
       <div id="calendar"></div>
       <nebula-dialog id="dialog">
@@ -46,7 +47,12 @@
       <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
     </div>
     </nebula-dialog>
+<<<<<<< Updated upstream
       <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
+=======
+
+      <iron-ajax url="bestand.json" handle-as="json" auto on-response="handleResp"></iron-ajax>
+>>>>>>> Stashed changes
     </template>
 
     <script>
@@ -55,19 +61,33 @@
             is: 'my-rooster',
 
             properties: {
-              vakNaam: {},
-              vakDocent: {},
-              klasCode: {},
-              start: {},
-              end: {},
+                vakNaam: {},
+                vakDocent: {},
+                klasCode: {},
+                start: {},
+                end: {},
+            },
+            listeners: {
+                'request': 'ajaxRequest',
+                'response': 'ajaxResponse'
             },
 
             bekijkPresentie: function() {
+<<<<<<< Updated upstream
                 window.location.assign("/#/systeem/presentieles/?uuid="+les.uuid);
+=======
+                alert("Open nu dat presentie schermpie");
+>>>>>>> Stashed changes
             },
 
-            closeModal: function(){
-              this.$.dialog.close();
+            closeModal: function() {
+                this.$.dialog.close();
+            },
+            ajaxRequest: function() {
+                $("#loader1").css("display", "block");
+            },
+            ajaxResponse: function() {
+                $("#loader1").css("display", "none");
             },
             handleResp: function(request) {
                 console.log(request.detail.response);
@@ -83,8 +103,11 @@
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
+<<<<<<< Updated upstream
                         les = calEvent;
                         console.log(calEvent);
+=======
+>>>>>>> Stashed changes
                         self.$.dialog.show();
                         self.vakNaam = calEvent.title;
                         self.vakDocent = calEvent.docent.voornaam;
