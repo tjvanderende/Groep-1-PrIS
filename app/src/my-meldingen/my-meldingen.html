@@ -14,49 +14,49 @@
       <h1>Hello world</h1>
     </template> -->
     <template is="dom-bind">
-        <iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
-        <iron-data-table items="{{data}}" selection-enabled>
-            <!-- <iron-data-table items="[[data]]"> -->
+      <iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
+      <iron-data-table items="[[data]]" selection-enabled>
+      <!-- <iron-data-table items="[[data]]"> -->
 
-            <data-table-column name="Studentnr">
-                <template>
-                    <a href$="[[_c_baseURL]]student/[[item.student.nummer]]">
-                        <span>[[item.student.nummer]]</span>
-                    </a>
-                </template>
-            </data-table-column>
-            <!-- <data-table-column name="Studentnr">
-              <template>[[item.student.nummer]]</template>
-            </data-table-column> -->
-            <data-table-column name="Achternaam">
-                <template>[[item.student.achternaam]]</template>
-            </data-table-column>
-            <data-table-column name="Voornaam">
-                <template>[[item.student.voornaam]]</template>
-            </data-table-column>
-            <data-table-column name="Presentie">
-                <template>[[item.student.presentie]]</template>
-            </data-table-column>
+        <data-table-column name="Studentnr">
+          <template>
+            <a href$="[[_c_baseURL]]student/[[item.student.nummer]]">
+              <span>[[item.student.nummer]]</span>
+            </a>
+          </template>
+        </data-table-column>
+        <!-- <data-table-column name="Studentnr">
+          <template>[[item.student.nummer]]</template>
+        </data-table-column> -->
+        <data-table-column name="Achternaam">
+          <template>[[item.student.achternaam]]</template>
+        </data-table-column>
+        <data-table-column name="Voornaam">
+          <template>[[item.student.voornaam]]</template>
+        </data-table-column>
+        <data-table-column name="Presentie">
+          <template>[[item.student.presentie]]</template>
+        </data-table-column>
 
 
-        </iron-data-table>
+      </iron-data-table>
     </template>
 
     <script>
-        (function() {
-            'use strict';
-            /* _xxxx private              : geen external data binding      - geen notify
-             _c_xx private constant     : geen external binding, constant - geen notify
-             c_xx  public constant      : one way external databinding [[c_xx]] - geen notify nodig
-             xxxx  public               : two way external databinding {{xxxx}} - notify nodig
-             */
-            Polymer({
-                is: 'my-meldingen',
-                properties: {
+      (function() {
+        'use strict';
+        /* _xxxx private              : geen external data binding      - geen notify
+           _c_xx private constant     : geen external binding, constant - geen notify
+           c_xx  public constant      : one way external databinding [[c_xx]] - geen notify nodig
+           xxxx  public               : two way external databinding {{xxxx}} - notify nodig
+        */
+        Polymer({
+          is: 'my-meldingen',
+          properties: {
 
-                },
-            });
+          },
+        });
 
-        })();
+      })();
     </script>
 </dom-module>

@@ -141,19 +141,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <span>Home</span>
                     </a>
 
-                    <a name="systeem_account" href$="[[_c_baseURL]]systeem/account"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
+                    <!-- altijd beschikbaar--------------------------------------------------------- -->
+                    <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem/instellen_systeemdatum">
+                        <iron-icon icon="icons:today"></iron-icon>
+                        <span>(test) Instellen systeemdatum</span>
+                    </a>
+                    <a name="systeem_account" href$="[[_c_baseURL]]systeem/account">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Mijn Account</span>
                     </a>
-                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
+                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen">
                         <iron-icon icon="icons:today"></iron-icon>
-                        <span>Meldingen</span>
+                        <span>meldingen</span>
                     </a>
-                    <a name="systeem_rooster" href$="[[_c_baseURL]]systeem/rooster"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
+                    <a name="systeem_rooster" href$="[[_c_baseURL]]systeem/rooster">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>rooster</span>
                     </a>
-                    <a name="systeem_presentie" href$="[[_c_baseURL]]systeem/presentie"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
+                    <a name="systeem_presentie" href$="[[_c_baseURL]]systeem/presentie">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Bekijk presentie</span>
                     </a>
@@ -170,6 +175,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <span>Uitloggen</span>
                     </a>
 
+                    <!-- beschikbaar voor docent---------------------------------------------------- -->
+
+                    <!-- beschikbaar voor student--------------------------------------------------- -->
+                    <a name="student_medestudenten" href$="[[_c_baseURL]]student/medestudenten"
+                       verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
+                        <iron-icon icon="social:group"></iron-icon>
+                        <span>Toon medestudenten</span>
+                    </a>
 
                 </iron-selector>
             </app-drawer>
@@ -214,11 +227,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-material>
                 </section>
                 <section name="systeem_meldingen"
-                         title="Meldingen"
+                         title="MELDINGEN"
                          element$="my-meldingen">
                     <paper-material elevation="1">
-                        <my-presentieles>
-                        </my-presentieles>
+                        <my-meldingen>
+                        </my-meldingen>
                     </paper-material>
                 </section>
                 <section name="systeem_instellen_systeemdatum"
@@ -257,7 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="Account"
                          element$="my-account">
                     <paper-material elevation="1">
-                        <my-account data="_ar_subsubroute_data" rol="{{_rol}}">>
+                        <my-account>
                         </my-account>
                     </paper-material>
                 </section>
@@ -330,7 +343,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </section>
             </iron-pages>
         </app-drawer-layout>
-        <iron-ajax auto url="/person/me" on-response="_is_logged_in" handle-as="json"></iron-ajax>
+
     </template>
     <script>
         (function () {
@@ -349,12 +362,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: String,
                         value: "/#/",
                     },
-                    studentNummer: {
-                        type:String
-                    },
                     _rol: {
                         type: String,
-                        value: "undefined",  		//zodat login zichtbaar word
+                        value: "undefined",  		//zodat login zichtbaar wordt
                     },
                     _ar_page: {
                         type: String,
@@ -400,12 +410,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     '_ar_route_data_page_changed(_ar_route_data.page)',
                     '_ar_subroute_data_subpage_changed(_ar_subroute_data.subpage)',
                 ],
-                _is_logged_in: function (request) {
-                    var response = request.detail.response;
-                    if (response.status != 500) {
-                        this._rol = response.rol;
-                    }
-                },
+
                 _ar_route_data_page_changed: function (pNewPage) {
                     if (!this.$.drawer.persistent) {
                         this.$.drawer.close();
