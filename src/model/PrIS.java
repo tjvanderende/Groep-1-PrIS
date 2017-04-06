@@ -13,27 +13,19 @@ import java.util.function.Predicate;
 public class PrIS {
 	private PrISService dataService;
 	private ArrayList<Les> lessen = new ArrayList<Les>();
+	private Person loggedInPerson;
 	public PrIS(){
 		
 		// verander dit gedeelte om de data uit een andere bron te halen.
 		this.dataService = new PrISMockService();
+
         /**
          * Haal ingelogde persoon op;
          * else helaas geen rooster = geen data door de hele applicatie.
          */
 
-		this.lessen = this.loadLessenByPerson(new Docent("Test", "test123", "Jos", "jos.vanreenen@hu.nl"));
-	}
-	/**
-	 * Haal een student op
-	 * @param studentNmr, het student nummer van de Student die je wilt ophalen.
-	 * @return Student klas waar het studentnmr van is, return false als de Student niet bestaat.
-	 */
-	public Student getStudent(int studentNmr) {
-		return null;
 	}
 
-	
 	/**
 	 * Haal via rooster alle klassen op.
 	 * @return
@@ -72,7 +64,7 @@ public class PrIS {
                 }
             } else if (getSystemRole(person) == "student"){
 		        Student student = (Student) person;
-		        if(person == les.getKlas().getStudentByNummer(student.getStudentNummer())){
+		        if(student.getKlasNaam().equals(les.getKlas().getKlasNaam())){
                     personLessen.add(les);
                 }
             }
@@ -80,13 +72,21 @@ public class PrIS {
 		}
 		return personLessen;
 	}
+	public ArrayList<Les> getLessen(){
+		return this.lessen;
+	}
 
-	/**
-	 * Validate login gegevens (Gebruikersnaam / wachtwoord).
-	 * @return true als gegevens juist zijn.
-	 */
-	public boolean validateLoginInfo(){
-		return false;
+	public Student getStudentByNummer(int nummer){
+		Student studentByNummer = null;
+		for(Les les : this.dataService.loadLessen()){
+			ArrayList<Student> studenten = les.getKlas().getStudenten();
+            for (Student student: studenten) {
+                if(student.getStudentNummer() == nummer){
+                    studentByNummer = student;
+                }
+            }
+        }
+		return studentByNummer;
 	}
 	/**
 	 * 
@@ -97,26 +97,7 @@ public class PrIS {
 		return null;
 		
 	}
-	
-	public String getSystemRole(Person person){
-		if(person instanceof Docent){
-			return "docent";
-		} else {
-			return "student";
-		}
-		
-	}
-	/**
-	 * Haal ingelogde gebruiker op (als deze er is).
-	 * @return false als er geen ingelogde gebruiker is, anders persoon object.
-	 */
-	
-	public Person getLoggedInPerson(){
-		return new Docent("test", "test", "test", "test");
-	}
-	public ArrayList<Les> getLessen() {
-		return lessen;
-	}
+
 
 	/**
 	 * Zet de presentie van een student.
@@ -128,6 +109,75 @@ public class PrIS {
 	 	presentie.setIsAfwezig(afwezig);
 	 	this.dataService.saveStudentPresentie(presentie); // "sla de student op", dit is alleen om te illustreren hoe dit wordt aangeroepen.
 	 }
+
+	 public void setPresentie(boolean present){
+	 	StudentPresentie presentie = student.getPresentieByLes(lesUuid);
+	 	presentie.setIsPresent(present);
+	 	this.dataService.saveStudentPresentie(presentie);
+	 }
+
+	/**
+	 * Login afhandelings helpers komen hier.
+	 */
+	/**
+	 * Valideer de input van een gebruiker.
+	 * Daarna wordt alle data ingeladen voor de gebruiker.
+	 * @return True als succesvol ingelogd.
+	 */
+	public boolean login(String username, String password){
+		this.loggedInPerson = this.validateLoginInfo(username, password);
+		if(this.loggedInPerson != null){
+			this.lessen = this.loadLessenByPerson(this.loggedInPerson); // laadt nu alle data in met de persoon.
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public Person validateLoginInfo(String username, String password){
+		for(Les les : this.dataService.loadLessen()) {
+			if(les.getDocent().getUsername().equals(username) && les.getDocent().getPassword().equals(password)){
+				return les.getDocent();
+			}
+			for (Student student : les.getKlas().getStudenten()) {
+				if(student.getUsername().equals(username) && student.getPassword().equals(password)){
+					return student;
+				}
+			}
+		}
+		return null;
+	}
+
+
+
+	/**
+	 * Check of de gebruiker op dit moment is ingelogd.
+	 * @return true als er een persoon object is opgeslagen.
+	 */
+	public boolean isLoggedIn() {
+	 	return this.loggedInPerson != null;
+	}
+
+	public Person getLoggedInPerson(){
+		return this.loggedInPerson;
+	}
+
+	/**
+	 * Haal systeem rol op van de gebruiker (Let op een docent kan ook SLB'er en decaan als subrollen hebben).
+	 * @param person
+	 * @return
+	 */
+	public String getSystemRole(Person person){
+		if(person instanceof Docent){
+			return "docent";
+		} else {
+			return "student";
+		}
+
+	}
+
+	public void logout() {
+		this.loggedInPerson = null;
+	}
 }
 
 

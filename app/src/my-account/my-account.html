@@ -1,18 +1,22 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/js-url/url.min.js"></script>
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
 
 <dom-module id="my-account">
   <style>
-    .naam{
-
+    .static{
+      font-size: 15px;
+      padding: 10px;
     }
-    .naamout{
-      text-indent: 20px;
+    .out{
       font-size: 20px;
+      padding-right: 10px;
     }
     .foto-mats{
       padding: 2px;
@@ -23,65 +27,176 @@
     .toelichting-bttn{
       text-transform: none;
       color: white;
-      background-color: #333;
+      background-color: #4885ed;
     }
-    .hidden{
-      display: none;
+    .wijzig{
       border: solid 1px;
+      background-color: #4885ed;
+      color: white;
       padding: 10px;
     }
-    .x{
+    .close{
       display: none;
-      border: solid 1px;
-      text-decoration: underline;
-      padding: 10px;
+      text-transform: none;
+      background-color: #db3236;
+      color: white;
+    }
+    .nieuw{
+      display: none;
+      width: 500px;
+      height: 100px;
+      margin-bottom: 10px;
+      margin-top: 5px;
+    }
+    .submit{
+      display: none;
+      text-transform: none;
+      background-color: #4885ed;
+      color: white;
+    }
+    .dropdown-menu{
+      display : none;
     }
   </style>
   <template>
     <div class="my_vertical-elements">
       <div class="my-line">
         <img class="foto-mats" src="../../images/Mats.jpg">
-        <span class="naam">Naam:</span>
-        <span class="naamout">{{naam()}}</span><br><br><br>
-        <span class="presentie" id="presentie"> Presentie: {{presentie()}}</span><br><br><br>
-        <span class="gemeld">{{gemeld()}}</span><br><br><br>
-        <paper-button id="bttn"class="toelichting-bttn" on-tap="click">Toelichting</paper-button><br><br>
-        <span id="hidden" class="hidden">{{toelichting()}}</span>
-        <button id="x" class="x" on-tap="hide">Close</button>
+
+        <span class="static">Naam:</span>
+        <span class="out">{{naam()}}</span><br><br><br>
+        <span class="static">Studentnummer:</span>
+        <span class="out">{{studentnummer()}}</span><br><br><br>
+        <span class="static">Email:</span>
+        <span class="out">{{email()}}</span><br><br><br>
+        <span class="static" id="presentie"> Presentie:</span>
+        <span class="out"> {{presentie()}}</span><br><br><br>
+        <span class="static" id="status">Status:</span>
+        <span class="out" id="statusid">{{statusvalue()}}</span>
+        <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
+
+        <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
+          <paper-listbox id="dropdowncontent" class="dropdown-content" selected={{status()}}>
+            <paper-item>Geen status</paper-item>
+            <paper-item>Gemeld aan SLB'er</paper-item>
+            <paper-item>Gemeld aan Decaan</paper-item>
+            <paper-item>Afgehandeld</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu><br><br>
+
+        <span id="toelichting" class="static">Toelichting: </span>
+        <span id="toelichtingout" class="out">{{toelichting()}}</span>
+        <textarea id="nieuw" class="nieuw">{{toelichting()}}</textarea><br>
+        <paper-button id="submit" class="submit" on-tap="submit">Submit</paper-button>
+        <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
   </template>
 
   <script>
 
-    Polymer({
-      is: "my-account",
-      naam: function(){
-        naam = "Mats de Zwaard";
-        return naam;
-      },
-      presentie: function(){
-        presentie = "12%";
-        return presentie;
-      },
-      gemeld : function(){
-        gemeld = "Gemeld aan SLB'er"
-        return gemeld;
-      },
-      toelichting: function(){
-        toelichting = "Student is vaak afwezig geweest door drugsmisbruik";
-        return toelichting;
-      },
-      click: function(){
-        var elem = this.$.hidden;
-        elem.style.display = "inline";
-        var elem = this.$.x;
-        elem.style.display = "inline";
-      },
-      hide: function(){
-        var elem = this.$.hidden;
-        var elem1 = this.$.x;
-        elem.style.display = "none";
-        elem1.style.display = "none";
-      }
-    });
+      var toelichting = "Student is vaak afwezig geweest door drugsmisbruik";
+      var statusvalue = "Gemeld aan SLB'er";
+      var status = 1;
+      var naam = "Mats de Zwaard";
+      var email = "mats.dezwaard@student.hu.nl";
+      var studentnummer = "1234455";
+      var presentie = "12%";
+      var toelichtingvar, toelichtingoutvar, wijzigvar, nieuwvar, submitvar, dropdownvar, closevar, statusidvar, statusvar;
+
+      Polymer({
+          is: "my-account",
+          properties: {
+            studentNummer: {
+                type: Number,
+                value: $.url().split("=")[1]
+            },
+              _ar_page: {
+                type: String,
+                observer: "routeChanged"
+            },
+          },
+
+
+          attributeChanged : function(name, type){
+              if(this.getAttribute('class').includes('iron-selected')){
+                  console.log("test");
+              }
+          },
+
+          naam: function(){
+              return naam;
+          },
+
+          ready: function(){
+              toelichtingvar = this.$.toelichting;
+              toelichtingoutvar = this.$.toelichtingout;
+              wijzigvar = this.$.wijzig;
+              nieuwvar = this.$.nieuw;
+              submitvar = this.$.submit;
+              closevar = this.$.close;
+              dropdownvar = this.$.dropdown;
+              statusidvar = this.$.statusid;
+              statusvar = this.$.status;
+              console.log(this.studentNummer);
+          },
+          statusvalue : function() {
+              return statusvalue;
+          },
+          status: function(){
+              return status;
+          },
+          email: function(){
+              return email;
+          },
+          studentnummer: function(){
+              return studentnummer;
+          },
+          presentie: function(){
+              return presentie;
+          },
+          gemeld: function(){
+              return status;
+          },
+          toelichting: function(){
+              return toelichting;
+          },
+          hide: function(){
+              this.$.dropdowncontent.selected = status;
+              closevar.style.display = "none";
+              dropdownvar.style.display = "none";
+              submitvar.style.display = "none";
+              nieuwvar.style.display = "none";
+              statusidvar.style.display = "inline";
+              statusvar.style.display = "inline";
+              toelichtingvar.style.display = "inline";
+              toelichtingoutvar.style.display = "inline";
+              wijzigvar.style.display = "inline";
+          },
+          submit: function(){
+              toelichting = this.$.nieuw.value;
+              statusvalue = this.$.dropdown.value;
+              this.$.statusid.innerHTML = statusvalue;
+              closevar.style.display = "none";
+              dropdownvar.style.display = "none";
+              submitvar.style.display = "none";
+              nieuwvar.style.display = "none";
+              statusidvar.style.display = "inline";
+              statusvar.style.display = "inline";
+              toelichtingvar.style.display = "inline";
+              toelichtingoutvar.innerHTML = toelichting;
+              toelichtingoutvar.style.display = "inline";
+              wijzigvar.style.display = "inline";
+          },
+          wijzig: function(){
+              statusidvar.style.display = "none";
+              statusvar.style.display = "none";
+              nieuwvar.style.display = "inline";
+              closevar.style.display = "inline";
+              dropdownvar.style.display = "table";
+              submitvar.style.display = "inline";
+              toelichtingvar.style.display = "none";
+              toelichtingoutvar.style.display = "none";
+              wijzigvar.style.display = "none";
+          }
+      });
   </script>
 </dom-module>

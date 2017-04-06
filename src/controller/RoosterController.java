@@ -7,10 +7,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import model.Les;
-import model.PrIS;
-import model.Student;
-import model.StudentPresentie;
+import model.*;
 import server.Conversation;
 import server.Handler;
 
@@ -57,12 +54,22 @@ public class RoosterController implements Handler {
         if(lesUuid != null){
             Les les = informatieSysteem.getLesByNummer(lesUuid);
             Student student= les.getKlas().getStudentByNummer(studentNummer);
+            Person person = informatieSysteem.getLoggedInPerson();
+				if(informatieSysteem.getSystemRole(person) == "student"){
+					Student studentCheck = (Student) person;
+					if(studentCheck.getStudentNummer() == student.getStudentNummer()){
+						informatieSysteem.setPresentie(afwezigheid);
+					} else {
+						conversation.sendJSONMessage(new Error("Deze student presentie is niet van jouw!", 200).make());
 
+					}
+				}else {
+					informatieSysteem.setAfwezigheid(student, lesUuid,afwezigheid);
+				}
                 /**
                  * if (currentUserRole == "student" && currentUser.nummer == studentNummer) student.setVerwachtAfwezig(afwezigheid);
                  * else student.presentie
                  */
-                informatieSysteem.setAfwezigheid(student, lesUuid,afwezigheid);
                 conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
 
         }else {
@@ -102,7 +109,6 @@ public class RoosterController implements Handler {
 			/**
 			 * Toon fout melding.
 			 */
-			String lJsonOutStr = "test";
 			conversation.sendJSONMessage(new Error("Niet alle parameters die nodig zijn, zijn meegegeven", 500).make());
 		}
 		String lJsonOutStr = presentieArray.build().toString();

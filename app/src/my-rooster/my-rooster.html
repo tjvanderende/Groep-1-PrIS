@@ -10,43 +10,53 @@
 
 <dom-module id="my-rooster">
     <template>
-      <style include="fullcalendar-styles">
+        <style include="fullcalendar-styles">
 
-      .lesInfo{
-        min-width: 150px;
-        max-width: 400px;
-        word-wrap: break-word;
-        background-color: white;
-        padding: 10px;
-        border-radius: 15px;
-        -moz-border-radius: 15px;
-      }
-      .blue{
-        background-color: #0066cc;
-        color: white;
-      }
-      .red{
-        background-color: #990000;
-        color: white;
-      }
-    h3{
-      margin: 5px 5px 5px 5px;
-    }
-</style>
-      <div id="calendar"></div>
-      <nebula-dialog id="dialog">
-    <div class="lesInfo">
-      <h3>Informatie over vandaag</h3>
-      Vak: [[vakNaam]] <br>
-      Docent: [[vakDocent]]<br>
-      Klascode: [[klasCode]]<br>
-      Begint om: [[start]]<br>
-      Eindigt om: [[end]]<br><br>
-      <paper-button class="blue" on-tap="bekijkPresentie" dat>Bekijk presentie</paper-button>
-      <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
-    </div>
-    </nebula-dialog>
-      <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
+            .lesInfo{
+                min-width: 150px;
+                max-width: 400px;
+                word-wrap: break-word;
+                background-color: white;
+                padding: 10px;
+                border-radius: 15px;
+                -moz-border-radius: 15px;
+            }
+            .blue{
+                background-color: #0066cc;
+                color: white;
+            }
+            .red{
+                background-color: #990000;
+                color: white;
+            }
+            h3{
+                margin: 5px 5px 5px 5px;
+            }
+
+        </style>
+        <div id="calendar"></div>
+        <nebula-dialog id="dialog">
+            <div class="lesInfo">
+                <h3>Informatie over vandaag</h3>
+                Vak: [[vakNaam]] <br>
+                Docent: [[vakDocent]]<br>
+                Klascode: [[klasCode]]<br>
+                Begint om: [[start]]<br>
+                Eindigt om: [[end]]<br><br>
+                <template is="dom-if" if="{{is_docent()}}"><paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
+                <template is="dom-if" if="{{is_student()}}">
+                    <paper-checkbox id="set_presentie" class="styled">
+                        Checkbox
+                        <span class="subtitle">
+                            With a longer label
+                        </span>
+                    </paper-checkbox>
+                </template>
+                <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
+            </div>
+        </nebula-dialog>
+
+        <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
     </template>
 
     <script>
@@ -55,22 +65,44 @@
             is: 'my-rooster',
 
             properties: {
-              vakNaam: {},
-              vakDocent: {},
-              klasCode: {},
-              start: {},
-              end: {},
+                vakNaam: {},
+                vakDocent: {},
+                klasCode: {},
+                start: {},
+                end: {},
             },
+            listeners: {
+                'request': 'ajaxRequest',
+                'response': 'ajaxResponse'
+            },
+            ready: function(){
+                this.async(function() {
+                    this.$$('#set_presentie').addEventListener('iron-change', function(e){
 
+                    });
+                }, 50);
+            },
+            is_student: function(){
+              return this.rol == 'student';
+            },
+            is_docent: function(){
+                return this.rol == 'docent';
+            },
             bekijkPresentie: function() {
-                window.location.assign("/#/systeem/presentieles/?uuid="+les.uuid);
+                alert("Open nu dat presentie schermpie");
             },
 
-            closeModal: function(){
-              this.$.dialog.close();
+            closeModal: function() {
+                this.$.dialog.close();
             },
+            ajaxRequest: function() {
+                $("#loader1").css("display", "block");
+            },
+            ajaxResponse: function() {
+                $("#loader1").css("display", "none");
+            },
+
             handleResp: function(request) {
-                console.log(request.detail.response);
                 var self = this;
                 $(this.$.calendar).fullCalendar({
                     header: {
@@ -83,11 +115,9 @@
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
-                        les = calEvent;
-                        console.log(calEvent);
                         self.$.dialog.show();
                         self.vakNaam = calEvent.title;
-                        self.vakDocent = calEvent.docent.voornaam;
+                        self.vakDocent = calEvent.docent.email;
                         self.klasCode = calEvent.klas.klascode;
                         self.start = calEvent._start._i;
                         self.end = calEvent._end._i;
