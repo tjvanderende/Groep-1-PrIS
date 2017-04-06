@@ -90,6 +90,10 @@
                 class="my-button"
                 on-click="_medestudenten_opslaan_request_handler">Opslaan
         </paper-button>
+        <paper-button
+                class="my-button"
+                on-click="test">test
+        </paper-button>
         <iron-ajax id="ajax_studenten_ophalen" url="/rooster/les?uuid=[[uuid]]" handle-as="json" auto
                    on-response="_medestudenten_ophalen_response_handler"></iron-ajax>
 
@@ -128,7 +132,9 @@
                          als c_visible false is */
                     },
                 },
-
+                test: function(event){
+                    dom.target.remove();
+                },
                 _go_home: function () {
                     var lApp = document.querySelector('my-app');  //het polymer element <my-app>
                     var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter

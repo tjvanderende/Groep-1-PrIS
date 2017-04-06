@@ -1,0 +1,20 @@
+[
+  {"student": {
+    "nummer": "123456",
+    "voornaam": "Piet",
+    "achternaam": "Broekmans",
+    "presentie": "20%"
+  }},
+  {"student": {
+    "nummer": "654321",
+    "voornaam": "Micheal",
+    "achternaam": "Jackson",
+    "presentie": "0%"
+  }},
+  {"student": {
+    "nummer": "135246",
+    "voornaam": "Piet",
+    "achternaam": "Heijde, van der",
+    "presentie": "15%"
+  }}
+]
