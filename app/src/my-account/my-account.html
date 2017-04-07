@@ -9,194 +9,204 @@
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 
 <dom-module id="my-account">
-  <style>
-    .static{
-      font-size: 15px;
-      padding: 10px;
-    }
-    .out{
-      font-size: 20px;
-      padding-right: 10px;
-    }
-    .foto-mats{
-      padding: 2px;
-      border: solid 0.5px;
-      float: right;
-      width: 250px;
-    }
-    .toelichting-bttn{
-      text-transform: none;
-      color: white;
-      background-color: #4885ed;
-    }
-    .wijzig{
-      border: solid 1px;
-      background-color: #4885ed;
-      color: white;
-      padding: 10px;
-    }
-    .close{
-      display: none;
-      text-transform: none;
-      background-color: #db3236;
-      color: white;
-    }
-    .nieuw{
-      display: none;
-      width: 500px;
-      height: 100px;
-      margin-bottom: 10px;
-      margin-top: 5px;
-    }
-    .submit{
-      display: none;
-      text-transform: none;
-      background-color: #4885ed;
-      color: white;
-    }
-    .dropdown-menu{
-      display : none;
-    }
-  </style>
-  <template>
-    <div class="my_vertical-elements">
-      <div class="my-line">
-        <img class="foto-mats" src="../../images/Mats.jpg">
+    <style>
+        .static {
+            font-size: 15px;
+            padding: 10px;
+        }
 
-        <span class="static">Naam:</span>
-        <span class="out">{{naam()}}</span><br><br><br>
-        <span class="static">Studentnummer:</span>
-        <span class="out">{{studentnummer()}}</span><br><br><br>
-        <span class="static">Email:</span>
-        <span class="out">{{email()}}</span><br><br><br>
-        <span class="static" id="presentie"> Presentie:</span>
-        <span class="out"> {{presentie()}}</span><br><br><br>
-        <span class="static" id="status">Status:</span>
-        <span class="out" id="statusid">{{statusvalue()}}</span>
-        <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
+        .out {
+            font-size: 20px;
+            padding-right: 10px;
+        }
 
-        <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
-          <paper-listbox id="dropdowncontent" class="dropdown-content" selected={{status()}}>
-            <paper-item>Geen status</paper-item>
-            <paper-item>Gemeld aan SLB'er</paper-item>
-            <paper-item>Gemeld aan Decaan</paper-item>
-            <paper-item>Afgehandeld</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu><br><br>
+        .foto-mats {
+            padding: 2px;
+            border: solid 0.5px;
+            float: right;
+            width: 250px;
+        }
 
-        <span id="toelichting" class="static">Toelichting: </span>
-        <span id="toelichtingout" class="out">{{toelichting()}}</span>
-        <textarea id="nieuw" class="nieuw">{{toelichting()}}</textarea><br>
-        <paper-button id="submit" class="submit" on-tap="submit">Submit</paper-button>
-        <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
-  </template>
+        .toelichting-bttn {
+            text-transform: none;
+            color: white;
+            background-color: #4885ed;
+        }
 
-  <script>
+        .wijzig {
+            border: solid 1px;
+            background-color: #4885ed;
+            color: white;
+            padding: 10px;
+        }
 
-      var toelichting = "Student is vaak afwezig geweest door drugsmisbruik";
-      var statusvalue = "Gemeld aan SLB'er";
-      var status = 1;
-      var naam = "Mats de Zwaard";
-      var email = "mats.dezwaard@student.hu.nl";
-      var studentnummer = "1234455";
-      var presentie = "12%";
-      var toelichtingvar, toelichtingoutvar, wijzigvar, nieuwvar, submitvar, dropdownvar, closevar, statusidvar, statusvar;
+        .close {
+            display: none;
+            text-transform: none;
+            background-color: #db3236;
+            color: white;
+        }
 
-      Polymer({
-          is: "my-account",
-          properties: {
-            studentNummer: {
-                type: Number,
-                value: $.url().split("=")[1]
+        .nieuw {
+            display: none;
+            width: 500px;
+            height: 100px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .submit {
+            display: none;
+            text-transform: none;
+            background-color: #4885ed;
+            color: white;
+        }
+
+        .dropdown-menu {
+            display: none;
+        }
+    </style>
+    <template>
+        <div class="my_vertical-elements">
+            <div class="my-line">
+                <img class="foto-mats" src="../../images/Mats.jpg">
+
+                <span class="static">Naam:</span>
+                <span class="out">{{naam}}</span><br><br><br>
+                <span class="static">Studentnummer:</span>
+                <span class="out">{{studentNummer}}</span><br><br><br>
+                <span class="static">Email:</span>
+                <span class="out">{{email}}</span><br><br><br>
+                <span class="static" id="presentie"> Presentie:</span>
+                <span class="out"> {{presentie}}</span><br><br><br>
+                <span class="static" id="status">Status:</span>
+                <span class="out" id="statusid">{{statusvalue}}</span>
+                <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
+
+                <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
+                    <paper-listbox id="dropdowncontent" class="dropdown-content" selected={{status}}>
+                        <paper-item>Geen status</paper-item>
+                        <paper-item>Gemeld aan SLB'er</paper-item>
+                        <paper-item>Gemeld aan Decaan</paper-item>
+                        <paper-item>Afgehandeld</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                <br><br>
+
+                <span id="toelichting" class="static">Toelichting: </span>
+                <span id="toelichtingout" class="out">{{toelichting}}</span>
+                <textarea id="nieuw" class="nieuw">{{toelichting}}</textarea><br>
+                <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
+                <paper-button id="submit" class="submit" on-tap="hide">Submit</paper-button>
+
+                <iron-ajax url="/student?studentNummer=1640545" on-response="get_student" auto></iron-ajax>
+                <iron-ajax url="/"></iron-ajax>
+    </template>
+
+    <script>
+
+        var status = 1;
+
+        Polymer({
+            is: "my-account",
+            properties: {
+                studentNummer: {
+                    type: Number,
+                    value: 38383838
+                },
+                _ar_page: {
+                    type: String,
+                    observer: "routeChanged"
+                },
+                toelichting: {
+                    type: String,
+                    value: "Student is vaak afwezig geweest door drugsmisbruik"
+                },
+                status: {
+                    type: String,
+                    value: "Gemeld aan SLB'er"
+                },
+                naam: {
+                    type: String,
+                    value: "Mats de Waard"
+                },
+                email: {
+                    type: String,
+                    value: "mats.dewaard@student.hu.nl"
+                },
+                presentie: {
+                    type: String,
+                    value: "12"
+                },
+
             },
-              _ar_page: {
-                type: String,
-                observer: "routeChanged"
+
+            get_student: function (request){
+                var student = request.detail.response;
+                this.status = student.status;
+                this.toelichting = student.statusToelichting;
+                this.email = student.email;
+                this.naam = student.voornaam;
+                this.presentie = student.presentie;
             },
-          },
+            attributeChanged: function (name, type) {
+                if (this.getAttribute('class').includes('iron-selected')) {
+                    console.log("test");
+                }
+            },
 
 
-          attributeChanged : function(name, type){
-              if(this.getAttribute('class').includes('iron-selected')){
-                  console.log("test");
-              }
-          },
+            ready: function () {
+                toelichtingvar = this.$.toelichting;
+                toelichtingoutvar = this.$.toelichtingout;
+                wijzigvar = this.$.wijzig;
+                nieuwvar = this.$.nieuw;
+                submitvar = this.$.submit;
+                closevar = this.$.close;
+                dropdownvar = this.$.dropdown;
+                statusidvar = this.$.statusid;
+                statusvar = this.$.status;
+                console.log(this.studentNummer);
+            },
 
-          naam: function(){
-              return naam;
-          },
-
-          ready: function(){
-              toelichtingvar = this.$.toelichting;
-              toelichtingoutvar = this.$.toelichtingout;
-              wijzigvar = this.$.wijzig;
-              nieuwvar = this.$.nieuw;
-              submitvar = this.$.submit;
-              closevar = this.$.close;
-              dropdownvar = this.$.dropdown;
-              statusidvar = this.$.statusid;
-              statusvar = this.$.status;
-              console.log(this.studentNummer);
-          },
-          statusvalue : function() {
-              return statusvalue;
-          },
-          status: function(){
-              return status;
-          },
-          email: function(){
-              return email;
-          },
-          studentnummer: function(){
-              return studentnummer;
-          },
-          presentie: function(){
-              return presentie;
-          },
-          gemeld: function(){
-              return status;
-          },
-          toelichting: function(){
-              return toelichting;
-          },
-          hide: function(){
-              this.$.dropdowncontent.selected = status;
-              closevar.style.display = "none";
-              dropdownvar.style.display = "none";
-              submitvar.style.display = "none";
-              nieuwvar.style.display = "none";
-              statusidvar.style.display = "inline";
-              statusvar.style.display = "inline";
-              toelichtingvar.style.display = "inline";
-              toelichtingoutvar.style.display = "inline";
-              wijzigvar.style.display = "inline";
-          },
-          submit: function(){
-              toelichting = this.$.nieuw.value;
-              statusvalue = this.$.dropdown.value;
-              this.$.statusid.innerHTML = statusvalue;
-              closevar.style.display = "none";
-              dropdownvar.style.display = "none";
-              submitvar.style.display = "none";
-              nieuwvar.style.display = "none";
-              statusidvar.style.display = "inline";
-              statusvar.style.display = "inline";
-              toelichtingvar.style.display = "inline";
-              toelichtingoutvar.innerHTML = toelichting;
-              toelichtingoutvar.style.display = "inline";
-              wijzigvar.style.display = "inline";
-          },
-          wijzig: function(){
-              statusidvar.style.display = "none";
-              statusvar.style.display = "none";
-              nieuwvar.style.display = "inline";
-              closevar.style.display = "inline";
-              dropdownvar.style.display = "table";
-              submitvar.style.display = "inline";
-              toelichtingvar.style.display = "none";
-              toelichtingoutvar.style.display = "none";
-              wijzigvar.style.display = "none";
-          }
-      });
-  </script>
+            hide: function () {
+                this.$.dropdowncontent.selected = status;
+                closevar.style.display = "none";
+                dropdownvar.style.display = "none";
+                submitvar.style.display = "none";
+                nieuwvar.style.display = "none";
+                statusidvar.style.display = "inline";
+                statusvar.style.display = "inline";
+                toelichtingvar.style.display = "inline";
+                toelichtingoutvar.style.display = "inline";
+                wijzigvar.style.display = "inline";
+            },
+            submit: function () {
+                toelichting = this.$.nieuw.value;
+                statusvalue = this.$.dropdown.value;
+                this.$.statusid.innerHTML = statusvalue;
+                closevar.style.display = "none";
+                dropdownvar.style.display = "none";
+                submitvar.style.display = "none";
+                nieuwvar.style.display = "none";
+                statusidvar.style.display = "inline";
+                statusvar.style.display = "inline";
+                toelichtingvar.style.display = "inline";
+                toelichtingoutvar.innerHTML = toelichting;
+                toelichtingoutvar.style.display = "inline";
+                wijzigvar.style.display = "inline";
+            },
+            wijzig: function () {
+                statusidvar.style.display = "none";
+                statusvar.style.display = "none";
+                nieuwvar.style.display = "inline";
+                closevar.style.display = "inline";
+                dropdownvar.style.display = "table";
+                submitvar.style.display = "inline";
+                toelichtingvar.style.display = "none";
+                toelichtingoutvar.style.display = "none";
+                wijzigvar.style.display = "none";
+            }
+        });
+    </script>
 </dom-module>

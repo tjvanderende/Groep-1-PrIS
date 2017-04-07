@@ -217,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="Meldingen"
                          element$="my-meldingen">
                     <paper-material elevation="1">
-                        <my-meldingen>
+                        <my-meldingen subroles="{{_subroles}}">
                         </my-meldingen>
                     </paper-material>
                 </section>
@@ -353,6 +353,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     studentNummer: {
                         type:String
                     },
+                    _subroles: {
+                        type: Object,
+                        value: "undefined"
+                    },
                     _rol: {
                         type: String,
                         value: "undefined",  		//zodat login zichtbaar word
@@ -406,8 +410,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ],
                 _is_logged_in: function (request) {
                     var response = request.detail.response;
-                    console.log(request.detail.response);
                     if (response.status != 500) {
+                        if(response.rol == "docent"){
+                            if(response.subroles.length > 0){
+                                this._subroles = response.subroles;
+                            }
+                        }
                         this._rol = response.rol;
                     }
                 },

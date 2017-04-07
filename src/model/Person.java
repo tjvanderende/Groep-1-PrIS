@@ -24,7 +24,10 @@ public abstract class Person {
 	protected void logout(){
 		
 	}
-	
+
+	public ArrayList<PersonRole> getRoles(){
+		return this.roles;
+	}
 	public boolean isRole(String roleName){
 		boolean rolEqual = false;
 		for (PersonRole presentie: roles) {

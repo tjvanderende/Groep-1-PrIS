@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 /**
  * Stop alle models samen in deze implementatie.
@@ -106,7 +105,7 @@ public class PrIS {
 	 */
 	 public void setAfwezigheid(Student student, String lesUuid, boolean afwezig ){
 	 	StudentPresentie presentie = student.getPresentieByLes(lesUuid);
-	 	presentie.setIsAfwezig(afwezig);
+	 	presentie.setIsAanwezig(afwezig);
 	 	this.dataService.saveStudentPresentie(presentie); // "sla de student op", dit is alleen om te illustreren hoe dit wordt aangeroepen.
 	 }
 

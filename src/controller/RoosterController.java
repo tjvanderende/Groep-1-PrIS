@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -13,6 +15,8 @@ import server.Handler;
 
 public class RoosterController implements Handler {
 	private PrIS informatieSysteem;
+	private String kleur = "blue";
+	private boolean isBezig = false;
 	public RoosterController(PrIS infoSysteem) {
 		informatieSysteem = infoSysteem;
 		// TODO Auto-generated constructor stub
@@ -94,7 +98,7 @@ public class RoosterController implements Handler {
 				JsonObjectBuilder jsonObjectStudent = Json.createObjectBuilder();
 				JsonObjectBuilder jsonObjectPresentie = Json.createObjectBuilder();
 				StudentPresentie presentie = student.getPresentieByLes(les.getLesNummer());
-				jsonObjectPresentie.add("aanwezig", presentie.getIsAfwezig())
+				jsonObjectPresentie.add("aanwezig", presentie.getIsAanwezig())
 				   				   .add("verwachtAfwezig", presentie.getIsPresent());
 				jsonObjectStudent.add("nummer", student.getStudentNummer())
 						         .add("email", student.getEmail())
@@ -135,7 +139,14 @@ public class RoosterController implements Handler {
 						 .add("title", les.getCursusCode())
 						 .add("docent", jsonObjectDocent)
 						 .add("klas", jsonObjectKlas);
-			
+			if (LocalDate.now().toString().compareTo(les.getDatum()) == 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getStartTijd()) > 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getEindTijd()) < 0){
+				isBezig = true;
+				kleur = "green";
+				System.out.println("zou moeten werken");
+			}
+			jsonObjectLes.add("color" , kleur)
+				     .add("isBezig", isBezig);
+	
 			jsonArrayBuilder.add(jsonObjectLes);													//voeg het JsonObject aan het array toe				     
 
 		}

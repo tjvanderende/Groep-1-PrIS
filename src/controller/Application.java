@@ -63,6 +63,7 @@ public class Application {
 		 * Meldingen
 		 */
 		server.registerHandler("/meldingen", meldingenController);
+		server.registerHandler("/meldingen/edit", meldingenController);
 		server.start();
 	}
 }
