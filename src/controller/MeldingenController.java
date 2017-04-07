@@ -36,17 +36,17 @@ public class MeldingenController implements Handler{
         String uuid = jsonObject.getString("uuid");
         if(this.infoSysteem.isLoggedIn()) {
             Student otherStudent = infoSysteem.getStudentByNummer(nummer);
-            StudentPresentie presentie = otherStudent.getPresentieByLes(uuid)
+            StudentPresentie presentie = otherStudent.getPresentieByLes(uuid);
             if(this.infoSysteem.getSystemRole(infoSysteem.getLoggedInPerson()) == "student"){
                 Student student = (Student) infoSysteem.getLoggedInPerson();
                 if(student.getStudentNummer() == otherStudent.getStudentNummer()){
-                    infoSysteem.setPresentie(nummer, uuid, aanwezig);
-                    conversation.sendJSONMessage();
+                    infoSysteem.setPresentie(student, uuid, aanwezig);
+                    conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
                 } else {
                     conversation.sendJSONMessage(new Error("Je bent geen eigenaar van dit account", 500).make());
                 }
             } else {
-                conversation.sendJSONMessage(new Error("Je moet student zijn om deze functionaliteit te gebruiken"));
+                conversation.sendJSONMessage(new Error("Je moet student zijn om deze functionaliteit te gebruiken", 500).make());
             }
         }
     }
