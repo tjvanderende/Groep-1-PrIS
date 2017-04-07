@@ -45,9 +45,9 @@
                 Eindigt om: [[end]]<br><br>
                 <template is="dom-if" if="{{is_docent()}}"><paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
                 <template is="dom-if" if="{{is_student()}}">
-                    <!--<paper-checkbox id="set_presentie" value$="[[uuid]],[[]]">-->
-                        <!--Present-->
-                    <!--</paper-checkbox>-->
+                    <paper-checkbox on-tap="presentie_rooster" class="set_presentierooster" value$="[[uuid]]">
+                        Present
+                    </paper-checkbox>
                 </template>
                 <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
             </div>
@@ -74,22 +74,15 @@
                 'request': 'ajaxRequest',
                 'response': 'ajaxResponse'
             },
-            ready: function(){
-                this.async(function () {
-                    if (this.$$("#set_presentie")) {
-                        this.$$('#set_presentie').addEventListener('iron-change', function (e) {
-
+            presentie_rooster: function (e) {
                             $.ajax({
                                 type: 'POST',
                                 url: '/rooster/les/edit',
-                                data: JSON.stringify({ "uuid": e.target.value, "verwachtAfwezig": e.target.checked,"student": e.target.value }), // or JSON.stringify ({name: 'jonas'}),
+                                data: JSON.stringify({ "uuid": e.target.value, "verwachtAfwezig": e.target.checked,"student": this.nummer }), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
                                 contentType: "application/json",
                                 dataType: 'json'
                             });
-                        });
-                    }
-                }, 50);
             },
             is_student: function(){
               return this.rol == 'student';

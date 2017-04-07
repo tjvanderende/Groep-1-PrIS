@@ -400,7 +400,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: String,
                     },
                     _nummer: {
-                        type: String,
+                        type: Number,
                     },
                 },  //end of properties
 
@@ -417,6 +417,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             }
                         }
                         this._rol = response.rol;
+                        this._nummer = response.nummer;
+                        console.log(this._nummer);
                     }
                 },
                 _ar_route_data_page_changed: function (pNewPage) {
