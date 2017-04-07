@@ -6,9 +6,9 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../../bower_components/js-url/url.min.js"></script>
-<link rel="import"href="../../bower_components/iron-data-table/iron-data-table.html">
-<link rel="import"href="../../bower_components/iron-data-table/data-table-column.html">
-<link rel="import"href="../../bower_components/iron-data-table/data-table-row.html">
+<link rel="import" href="../../bower_components/iron-data-table/iron-data-table.html">
+<link rel="import" href="../../bower_components/iron-data-table/data-table-column.html">
+<link rel="import" href="../../bower_components/iron-data-table/data-table-row.html">
 <dom-module id="my-presentieles">
     <template restamp="true">
         <style>
@@ -37,9 +37,11 @@
                 border-bottom: 1px solid red; /* a red line */
                 padding-bottom: 2px; /* space above the border line */
             }
-            .rood{
+
+            .rood {
                 --paper-checkbox-unchecked-background-color: red;
             }
+
             .voornaam {
                 min-width: 100px;
                 text-align: left;
@@ -71,7 +73,8 @@
 
         <div class="my-title">Overzicht Meldingen</div>
         <!--<iron-ajax url="/meldingen" last-response="{{data}}" auto></iron-ajax>-->
-        <iron-ajax id="ajax_studenten_ophalen" method="POST" auto url="/rooster/les?uuid=[[uuid]]" handle-as="json" on-response="hresponse"></iron-ajax>
+        <iron-ajax id="ajax_studenten_ophalen" method="POST" auto url="/rooster/les?uuid=[[uuid]]" handle-as="json"
+                   on-response="hresponse"></iron-ajax>
         <iron-data-table items="[[data]]" selection-enabled>
             <data-table-column name="Naam">
                 <template>[[item.voornaam]][[item.achternaam]]</template>
@@ -83,9 +86,9 @@
             </data-table-column>
             <data-table-column name="Presentie">
                 <template is="dom-if" if="[[item.presentie.verwachtAfwezig]]">
-                    <paper-checkbox id="set_presentie"
-                                    class="my-check"
-                                    checked="[[item.presentie.aanwezig]]" value="[[item.nummer]]" >
+                    <paper-checkbox on-tap="presentie"
+                                    class="my-check set_presentie"
+                                    checked="[[item.presentie.aanwezig]]" value$="[[item.nummer]]">
                     </paper-checkbox>
                 </template>
 
@@ -130,28 +133,21 @@
                          als c_visible false is */
                     },
                 },
-                hresponse: function(request) {
+                hresponse: function (request) {
                     this.c_visible = false;
                     console.log(request.detail.response);
-                    this.data= request.detail.response;
+                    this.data = request.detail.response;
                 },
-                ready: function () {
-                    console.log(this.c_visible);
+                presentie: function (e) {
                     uuid = $.url().split("=")[1];
-                    this.async(function () {
-                        if (this.$$("#set_presentie")) {
-                            this.$$('#set_presentie').addEventListener('iron-change', function (e) {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/rooster/les/edit',
-                                    data: JSON.stringify({ "uuid": uuid, "afwezigheid": e.target.checked,"student": e.target.value }), // or JSON.stringify ({name: 'jonas'}),
+                    $.ajax({
+                        type: 'POST',
+                        url: '/rooster/les/edit',
+                        data: JSON.stringify({"uuid": uuid, "afwezigheid": e.target.checked, "student": parseInt(e.target.value)}), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
-                                    contentType: "application/json",
-                                    dataType: 'json'
-                                });
-                            });
-                        }
-                    }, 50);
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
                 },
                 _go_home: function () {
                     var lApp = document.querySelector('my-app');  //het polymer element <my-app>
@@ -163,9 +159,8 @@
                     if (this.c_visible) {    /* zodra zichtbaar geworden haal info op van server */
 //                        location.reload();
 //                        console.log("_ophalen_lesinfo_request_handler");
-                        this.$.ajax_studenten_ophalen.contentType="application/json";
-                        this.$.ajax_studenten_ophalen.body={
-                        };
+                        this.$.ajax_studenten_ophalen.contentType = "application/json";
+                        this.$.ajax_studenten_ophalen.body = {};
                         this.$.ajax_studenten_ophalen.generateRequest();
                     }
                 },
