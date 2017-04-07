@@ -91,7 +91,7 @@
                 return this.rol == 'docent';
             },
             bekijkPresentie: function() {
-                alert("Open nu dat presentie schermpie");
+                window.location.assign("/#/systeem/presentieles/?uuid="+les.uuid);
             },
 
             closeModal: function() {
@@ -117,6 +117,7 @@
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {
+                        les = calEvent;
                         self.$.dialog.show();
                         self.vakNaam = calEvent.title;
                         self.vakDocent = calEvent.docent.email;
