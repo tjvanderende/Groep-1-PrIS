@@ -41,6 +41,10 @@ public class PersonController implements Handler {
                 }
 
             }
+            if(informatieSysteem.getSystemRole(person) == "student"){
+                Student student = (Student) person;
+                personObject.add("nummer", ((Student) person).getStudentNummer());
+            }
             conversation.sendJSONMessage(personObject.build().toString());
         } else {
             conversation.sendJSONMessage(new Error("Je moet ingelogd zijn", 500).make());
