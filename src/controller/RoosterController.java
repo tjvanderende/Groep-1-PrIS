@@ -58,7 +58,7 @@ public class RoosterController implements Handler {
 				if(informatieSysteem.getSystemRole(person) == "student"){
 					Student studentCheck = (Student) person;
 					if(studentCheck.getStudentNummer() == student.getStudentNummer()){
-						informatieSysteem.setPresentie(afwezigheid);
+						informatieSysteem.setPresentie(student, lesUuid, afwezigheid);
 					} else {
 						conversation.sendJSONMessage(new Error("Deze student presentie is niet van jouw!", 200).make());
 

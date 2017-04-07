@@ -30,27 +30,31 @@ public class MeldingenController implements Handler{
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         if(infoSysteem.isLoggedIn()){
             Person person = infoSysteem.getLoggedInPerson();
-            if(infoSysteem.getSystemRole(person) == "docent"){
+            if(infoSysteem.getSystemRole(person).equals("docent")){
                 Docent docent = (Docent) person;
-                if(person.isRole("decaan") || person.isRole("slb")){
+                if(person.isRole("decaan") || person.isRole("slber")){
                     for(Les les: infoSysteem.getLessen()){
                         for(Student student : les.getKlas().getStudenten()){
                             builder.add("nummer", student.getStudentNummer());
                             builder.add("studentPercentage", student.calculatePercentage());
-                            builder.add("status", student.getStudentStatus());
-                            builder.add("statusToelichting", student.getStudentStatusToelichting());
-                            if(student.getSlbEmail().equals(docent.getEmail()) && student.getStudentStatus() == "bij-slber"){
+                           // builder.add("status", student.getStudentStatus());
+                            //builder.add("statusToelichting", student.getStudentStatusToelichting());
+
+                            if(student.getSlbEmail().equals(docent.getEmail()) && student.getStudentStatus().equals("bij-slber")){
                                 arrayBuilder.add(builder);
-                                conversation.sendJSONMessage(arrayBuilder.build().toString());
-                            } else if (student.getDecaanEmail().equals(docent.getEmail()) && student.getStudentStatus() == "bij-decaan") {
+                            } else if (student.getDecaanEmail().equals(docent.getEmail())) {
                                 arrayBuilder.add(builder);
-                                conversation.sendJSONMessage(arrayBuilder.build().toString());
                             }
+                            conversation.sendJSONMessage(arrayBuilder.build().toString());
+
                         }
                     }
                 } else {
                     conversation.sendJSONMessage(new Error("Je moet een rol als SLB'er of Decaan hebben.", 500).make());
                 }
+
+            } else {
+                conversation.sendJSONMessage(new Error("Je moet een rol als docent.", 500).make());
 
             }
         }else {

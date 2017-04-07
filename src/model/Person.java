@@ -12,8 +12,8 @@ public abstract class Person {
 		this.setUsername(uname);
 		this.password = pword;
 		this.voornaam = voornaam;
-		roles.add(new PersonRole("decaan"));
-		roles.add(new PersonRole("slb"));
+		//roles.add(new PersonRole("decaan"));
+		roles.add(new PersonRole("slber"));
 	}
 	
 

@@ -77,9 +77,10 @@
             },
             ready: function(){
                 this.async(function() {
-                    this.$$('#set_presentie').addEventListener('iron-change', function(e){
-
-                    });
+                    if(this.$$("#set_presentie")){
+                        this.$$('#set_presentie').addEventListener('iron-change', function(e){
+                        });
+                    }
                 }, 50);
             },
             is_student: function(){
