@@ -145,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Mijn Account</span>
                     </a>
-                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
+                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Meldingen</span>
                     </a>
@@ -217,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="Meldingen"
                          element$="my-meldingen">
                     <paper-material elevation="1">
-                        <my-meldingen>
+                        <my-meldingen subroles="{{_subroles}}">
                         </my-meldingen>
                     </paper-material>
                 </section>
@@ -249,7 +249,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                   De aanwezige literal waarde wordt met enkele quotes doorgegeven
                         -->
                         <my-rooster
-                                rol="{{_rol}}">
+                                rol="{{_rol}}"">
                         </my-rooster>
                     </paper-material>
                 </section>
@@ -352,6 +352,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     studentNummer: {
                         type:String
                     },
+                    _subroles: {
+                        type: Object,
+                        value: "undefined"
+                    },
                     _rol: {
                         type: String,
                         value: "undefined",  		//zodat login zichtbaar word
@@ -403,6 +407,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 _is_logged_in: function (request) {
                     var response = request.detail.response;
                     if (response.status != 500) {
+                        if(response.rol == "docent"){
+                            if(response.subroles.length > 0){
+                                this._subroles = response.subroles;
+                            }
+                        }
                         this._rol = response.rol;
                     }
                 },

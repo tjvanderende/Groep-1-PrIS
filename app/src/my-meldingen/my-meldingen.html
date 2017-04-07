@@ -18,28 +18,28 @@
         <iron-data-table items="[[data]]" selection-enabled>
             <!-- <iron-data-table items="[[data]]"> -->
 
-            <data-table-column name="Studentnr">
-                <template>
-                    <a href$="[[_c_baseURL]]student/[[item.student.nummer]]">
-                        <span>[[item.student.nummer]]</span>
-                    </a>
-                </template>
-            </data-table-column>
+
             <!-- <data-table-column name="Studentnr">
               <template>[[item.student.nummer]]</template>
             </data-table-column> -->
-            <data-table-column name="Achternaam">
-                <template>[[item.student.achternaam]]</template>
+            <data-table-column name="naam">
+                <template>[[item.voornaam]] [[item.achternaam]]</template>
             </data-table-column>
-            <data-table-column name="Voornaam">
-                <template>[[item.student.voornaam]]</template>
+
+            <data-table-column name="Studentnr">
+                <template>
+                    <a href$="[[_c_baseURL]]student/[[item.student.nummer]]">
+                        <span>[[item.nummer]]</span>
+                    </a>
+                </template>
             </data-table-column>
             <data-table-column name="Presentie">
-                <template>[[item.student.presentie]]</template>
+                <template>[[item.studentPercentage]]</template>
             </data-table-column>
 
 
         </iron-data-table>
+        
     </template>
 
     <script>
@@ -53,10 +53,13 @@
             Polymer({
                 is: 'my-meldingen',
                 properties: {
-
+                    subroles: {
+                        type: Object,
+                        notify: true,
+                    }
                 },
                 ready: function(){
-                    console.log("test");
+                    console.log(this.subroutes);
                 }
             });
 

@@ -94,7 +94,7 @@ public class RoosterController implements Handler {
 				JsonObjectBuilder jsonObjectStudent = Json.createObjectBuilder();
 				JsonObjectBuilder jsonObjectPresentie = Json.createObjectBuilder();
 				StudentPresentie presentie = student.getPresentieByLes(les.getLesNummer());
-				jsonObjectPresentie.add("aanwezig", presentie.getIsAfwezig())
+				jsonObjectPresentie.add("aanwezig", presentie.getIsAanwezig())
 				   				   .add("verwachtAfwezig", presentie.getIsPresent());
 				jsonObjectStudent.add("nummer", student.getStudentNummer())
 						         .add("email", student.getEmail())
