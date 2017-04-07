@@ -249,7 +249,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                   De aanwezige literal waarde wordt met enkele quotes doorgegeven
                         -->
                         <my-rooster
-                                rol="{{_rol}}">
+                                rol="{{_rol}}"
+                                nummer="{{_nummer}}">
                         </my-rooster>
                     </paper-material>
                 </section>
@@ -394,6 +395,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     _username: {
                         type: String,
                     },
+                    _nummer: {
+                        type: String,
+                    },
                 },  //end of properties
 
                 observers: [
@@ -402,6 +406,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ],
                 _is_logged_in: function (request) {
                     var response = request.detail.response;
+                    console.log(request.detail.response);
                     if (response.status != 500) {
                         this._rol = response.rol;
                     }
