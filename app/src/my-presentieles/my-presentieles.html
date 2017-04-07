@@ -6,6 +6,9 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../../bower_components/js-url/url.min.js"></script>
+<link rel="import"href="../../bower_components/iron-data-table/iron-data-table.html">
+<link rel="import"href="../../bower_components/iron-data-table/data-table-column.html">
+<link rel="import"href="../../bower_components/iron-data-table/data-table-row.html">
 <dom-module id="my-presentieles">
     <template restamp="true">
         <style>
@@ -34,7 +37,9 @@
                 border-bottom: 1px solid red; /* a red line */
                 padding-bottom: 2px; /* space above the border line */
             }
-
+            .rood{
+                --paper-checkbox-unchecked-background-color: red;
+            }
             .voornaam {
                 min-width: 100px;
                 text-align: left;
@@ -65,39 +70,29 @@
         </style>
 
         <div class="my-title">Overzicht Meldingen</div>
-        <table>
-            <tr>
-                <th class="voornaam">Voornaam</th>
-                <th class="achternaam">Achternaam</th>
-                <th class="meldingen">Melding</th>
-                <th class="action">Actie</th>
-            </tr>
-            <template is="dom-repeat" items="[[_c_studenten]]">
-                <tr>
-                    <td class="voornaam"><a href$="#/student/details/[[item.naam]]">[[item.voornaam]]</a></td>
-                    <td class="achternaam"><a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.achternaam]] </a>
-                    </td>
-                    <td class="melding">
-                        <paper-checkbox
-                                class="my-check"
-                                checked="{{item.sameGroup}}">
-                        </paper-checkbox>
-                    </td>
-                </tr>
-            </template>
-        </table>
-        <paper-button
-                class="my-button"
-                on-click="_medestudenten_opslaan_request_handler">Opslaan
-        </paper-button>
-        <paper-button
-                class="my-button"
-                on-click="test">test
-        </paper-button>
-        <iron-ajax id="ajax_studenten_ophalen" url="/rooster/les?uuid=[[uuid]]" handle-as="json" auto
-                   on-response="_medestudenten_ophalen_response_handler"></iron-ajax>
+        <!--<iron-ajax url="/meldingen" last-response="{{data}}" auto></iron-ajax>-->
+        <iron-ajax id="ajax_studenten_ophalen" method="POST" auto url="/rooster/les?uuid=[[uuid]]" handle-as="json" on-response="hresponse"></iron-ajax>
+        <iron-data-table items="[[data]]" selection-enabled>
+            <data-table-column name="Naam">
+                <template>[[item.voornaam]][[item.achternaam]]</template>
+            </data-table-column>
+            <data-table-column name="Studentnr">
+                <template>
+                    <span>[[item.nummer]]</span>
+                </template>
+            </data-table-column>
+            <data-table-column name="Presentie">
+                <template is="dom-if" if="[[item.presentie.verwachtAfwezig]]">
+                    <paper-checkbox id="set_presentie"
+                                    class="my-check"
+                                    checked="[[item.presentie.aanwezig]]" value="[[item.nummer]]" >
+                    </paper-checkbox>
+                </template>
+
+            </data-table-column>
 
 
+        </iron-data-table>
     </template>
 
     <script>
@@ -114,6 +109,9 @@
                     _c_studenten: {
                         type: Array, /* array<student-info>: student-info = {id, firstName, lastName, sameGroup}
                          array is constant groepnr is changable */
+                    },
+                    data: {
+                        type: Object,
                     },
                     c_rol: {
                         type: String,
@@ -132,32 +130,43 @@
                          als c_visible false is */
                     },
                 },
-                test: function(event){
-                    dom.target.remove();
+                hresponse: function(request) {
+                    this.c_visible = false;
+                    console.log(request.detail.response);
+                    this.data= request.detail.response;
+                },
+                ready: function () {
+                    console.log(this.c_visible);
+                    uuid = $.url().split("=")[1];
+                    this.async(function () {
+                        if (this.$$("#set_presentie")) {
+                            this.$$('#set_presentie').addEventListener('iron-change', function (e) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/rooster/les/edit',
+                                    data: JSON.stringify({ "uuid": uuid, "afwezigheid": e.target.checked,"student": e.target.value }), // or JSON.stringify ({name: 'jonas'}),
+//                                    success: function(data) { alert('data: ' + data); },
+                                    contentType: "application/json",
+                                    dataType: 'json'
+                                });
+                            });
+                        }
+                    }, 50);
                 },
                 _go_home: function () {
                     var lApp = document.querySelector('my-app');  //het polymer element <my-app>
                     var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
                     lAppRouter.data = {page: ""};                   // vul het data attribute met de homepage url
-                                                                    // door de two way binding in <app-route> en <app-location>
-                                                                    // zal ook de url echt wijzigen
                 },
 
                 _initializing: function () {
-                    if (this.c_visible) {
-                        //this.c_rol = "docent";
-                        // zodra zichtbaar geworden moet er wat worden gedaan
-//                        if (this.c_rol == "docent") {                        // voor studenten
-//                            this._studenten_ophalen_les_handler();    //    haal info op van server
-//                        } else {                                            // na handmatige url wijziging zonder login
-//                            var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
-//                            this._go_home();
-//                            /* terug naar home page */
-//                        }
-                        console.log(this._c_studenten);
+                    if (this.c_visible) {    /* zodra zichtbaar geworden haal info op van server */
+//                        location.reload();
+//                        console.log("_ophalen_lesinfo_request_handler");
+                        this.$.ajax_studenten_ophalen.contentType="application/json";
+                        this.$.ajax_studenten_ophalen.body={
+                        };
                         this.$.ajax_studenten_ophalen.generateRequest();
-                        console.log(this._c_studenten);
-
                     }
                 },
 
