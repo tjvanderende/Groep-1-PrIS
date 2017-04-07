@@ -145,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Mijn Account</span>
                     </a>
-                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen">
+                    <a name="systeem_meldingen" href$="[[_c_baseURL]]systeem/meldingen"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
                         <iron-icon icon="icons:today"></iron-icon>
                         <span>Meldingen</span>
                     </a>
@@ -249,7 +249,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                   De aanwezige literal waarde wordt met enkele quotes doorgegeven
                         -->
                         <my-rooster
-                                rol="{{_rol}}"">
+                                rol="{{_rol}}"
+                                nummer="{{_nummer}}">
                         </my-rooster>
                     </paper-material>
                 </section>
@@ -396,6 +397,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: String,
                     },
                     _username: {
+                        type: String,
+                    },
+                    _nummer: {
                         type: String,
                     },
                 },  //end of properties
