@@ -59,22 +59,25 @@ public class RoosterController implements Handler {
             Les les = informatieSysteem.getLesByNummer(lesUuid);
             Student student= les.getKlas().getStudentByNummer(studentNummer);
             Person person = informatieSysteem.getLoggedInPerson();
-				if(informatieSysteem.getSystemRole(person) == "student"){
+				if(informatieSysteem.getSystemRole(person).equals("student")){
 					Student studentCheck = (Student) person;
 					if(studentCheck.getStudentNummer() == student.getStudentNummer()){
 						informatieSysteem.setPresentie(student, lesUuid, afwezigheid);
+						conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
+
 					} else {
 						conversation.sendJSONMessage(new Error("Deze student presentie is niet van jouw!", 200).make());
 
 					}
 				}else {
 					informatieSysteem.setAfwezigheid(student, lesUuid,afwezigheid);
+					conversation.sendJSONMessage(new Error("Succesvol opgeslagen voor docent!", 200).make());
+
 				}
                 /**
                  * if (currentUserRole == "student" && currentUser.nummer == studentNummer) student.setVerwachtAfwezig(afwezigheid);
                  * else student.presentie
                  */
-                conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
 
         }else {
             conversation.sendJSONMessage(new Error("Geef een les UUID mee", 500).make());

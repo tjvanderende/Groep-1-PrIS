@@ -20,6 +20,7 @@ public class StudentPresentie {
 		return isAanwezig;
 	}
 	public void setIsAanwezig(boolean isAanwezig) {
+		this.isAanwezig = isAanwezig;
 	}
 
 	public String getLesNummer() {

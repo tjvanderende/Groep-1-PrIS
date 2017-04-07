@@ -28,7 +28,7 @@
 
             <data-table-column name="Studentnr">
                 <template>
-                    <a href$="[[_c_baseURL]]student/[[item.student.nummer]]">
+                    <a href$="[[_c_baseURL]]/systeem/account/?nummer={{item.nummer}}">
                         <span>[[item.nummer]]</span>
                     </a>
                 </template>
@@ -39,7 +39,7 @@
 
 
         </iron-data-table>
-        
+
     </template>
 
     <script>
