@@ -30,14 +30,6 @@
                 background: #1a9fd9; /* kind of blue */
                 --paper-button-ink-color: #00567B; /* kind of dark blue */
             }
-
-            .my-title {
-                font-size: 20px;
-                color: blue;
-                border-bottom: 1px solid red; /* a red line */
-                padding-bottom: 2px; /* space above the border line */
-            }
-
             .rood {
                 --paper-checkbox-unchecked-background-color: red;
             }
@@ -70,8 +62,6 @@
                 margin-left: 0px; /* reduce the default */
             }
         </style>
-
-        <div class="my-title">Overzicht Meldingen</div>
         <!--<iron-ajax url="/meldingen" last-response="{{data}}" auto></iron-ajax>-->
         <iron-ajax id="ajax_studenten_ophalen" method="POST" auto url="/rooster/les?uuid=[[uuid]]" handle-as="json"
                    on-response="hresponse"></iron-ajax>
