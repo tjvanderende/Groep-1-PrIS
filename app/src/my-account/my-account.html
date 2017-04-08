@@ -67,6 +67,7 @@
         }
     </style>
     <template>
+      <iron-ajax url="/docent" handle-as="json" on-response="handler" auto></iron-ajax>
         <div class="my_vertical-elements">
             <div class="my-line">
                 <img class="foto-mats" src="../../images/Mats.jpg">
@@ -98,14 +99,11 @@
                 <textarea id="nieuw" class="nieuw">{{toelichting}}</textarea><br>
                 <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
                 <paper-button id="submit" class="submit" on-tap="hide">Submit</paper-button>
-
-                <iron-ajax url="/student?studentNummer=1640545" on-response="get_student" auto></iron-ajax>
             </div>
         </div>
     </template>
 
     <script>
-
         var status = 1;
 
         Polymer({
@@ -142,7 +140,23 @@
 
             },
 
-            get_student: function (request){
+            handler: function(request) {
+                this.klassen = request.detail.response;
+                console.log(this.klassen);
+                var url = window.location.href; // or window.location.href for current url
+                var captured = /student=([^&]+)/.exec(url)[1];
+                for (var i = 0; i < this.klassen.length; i++) {
+                    for (var j = 0; j < this.klassen[i].studenten.length; j++) {
+                        if (this.klassen[i].studenten[j].nummer == captured){
+                            this.studentNummer = this.klassen[i].studenten[j].nummer;
+                            this.naam = this.klassen[i].studenten[j].voornaam + " " + this.klassen[i].studenten[j].achternaam;
+                            this.email = this.klassen[i].studenten[j].email;
+                            this.presentie = this.klassen[i].studenten[j].studentPrecentie;
+                        }
+                    }
+                }
+            },
+            get_student: function(request) {
                 var student = request.detail.response;
                 this.status = student.status;
                 this.toelichting = student.statusToelichting;
@@ -150,14 +164,14 @@
                 this.naam = student.voornaam;
                 this.presentie = student.presentie;
             },
-            attributeChanged: function (name, type) {
+            attributeChanged: function(name, type) {
                 if (this.getAttribute('class').includes('iron-selected')) {
                     console.log("test");
                 }
             },
 
 
-            ready: function () {
+            ready: function() {
                 toelichtingvar = this.$.toelichting;
                 toelichtingoutvar = this.$.toelichtingout;
                 wijzigvar = this.$.wijzig;
@@ -167,10 +181,10 @@
                 dropdownvar = this.$.dropdown;
                 statusidvar = this.$.statusid;
                 statusvar = this.$.status;
-                console.log(this.studentNummer);
+
             },
 
-            hide: function () {
+            hide: function() {
                 this.$.dropdowncontent.selected = status;
                 closevar.style.display = "none";
                 dropdownvar.style.display = "none";
@@ -182,7 +196,7 @@
                 toelichtingoutvar.style.display = "inline";
                 wijzigvar.style.display = "inline";
             },
-            submit: function () {
+            submit: function() {
                 toelichting = this.$.nieuw.value;
                 statusvalue = this.$.dropdown.value;
                 this.$.statusid.innerHTML = statusvalue;
@@ -197,7 +211,7 @@
                 toelichtingoutvar.style.display = "inline";
                 wijzigvar.style.display = "inline";
             },
-            wijzig: function () {
+            wijzig: function() {
                 statusidvar.style.display = "none";
                 statusvar.style.display = "none";
                 nieuwvar.style.display = "inline";
