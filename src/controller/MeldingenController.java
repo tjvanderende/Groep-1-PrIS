@@ -69,7 +69,7 @@ public class MeldingenController implements Handler{
 
                             if(student.getSlbEmail().equals(docent.getEmail()) && student.getStudentStatus().equals("bij-slber")){
                                 arrayBuilder.add(builder);
-                            } else if (student.getDecaanEmail().equals(docent.getEmail())) {
+                            } else if (student.getDecaanEmail().equals(docent.getEmail()) && student.getStudentStatus().equals("bij-decaan")) {
                                 arrayBuilder.add(builder);
                             }
 

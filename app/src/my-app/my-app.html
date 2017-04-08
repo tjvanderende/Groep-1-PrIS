@@ -85,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </style>
 
-        <app-location route="{{_ar_route}}" use-hash-as-path></app-location>
+        <app-location route="{{_ar_route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
 
         <!--  Matches everything starting with /
               and stores it in _ar_route_data.page
@@ -209,7 +209,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="PRESENTIELES"
                          element$="my-presentieles">
                     <paper-material elevation="1">
-                        <my-presentieles c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentieles')]]">>
+                        <my-presentieles uuid="[[uuid]]" c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentieles')]]">>
                         </my-presentieles>
                     </paper-material>
                 </section>
@@ -258,7 +258,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="Account"
                          element$="my-account">
                     <paper-material elevation="1">
-                        <my-account data="_ar_subsubroute_data" rol="{{_rol}}">>
+                        <my-account studentNummer="[[studentNummer]]" rol="{{_rol}}">>
                         </my-account>
                     </paper-material>
                 </section>
@@ -350,8 +350,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: String,
                         value: "/#/",
                     },
+                    uuid: {
+                        notify: true,
+                        type: String,
+                        value: "test"
+                    },
                     studentNummer: {
-                        type:String
+                        type:String,
+                        value: "test",
+                        notify:true
                     },
                     _subroles: {
                         type: Object,
@@ -399,9 +406,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     _username: {
                         type: String,
                     },
-                    _nummer: {
-                        type: Number,
-                    },
+
                 },  //end of properties
 
                 observers: [
@@ -415,9 +420,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             if(response.subroles.length > 0){
                                 this._subroles = response.subroles;
                             }
+                        } else {
+                            this.studentNummer = response.nummer;
                         }
                         this._rol = response.rol;
-                        this._nummer = response.nummer;
                         console.log(this._nummer);
                     }
                 },
@@ -480,6 +486,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      */
                     /* gebruikt het Javascript date object om op basis van een standaarddatumstring
                      een object te maken en via dit een lokaledatumstring te maken */
+
                     var eenDatumObject = new Date(); // is vandaag
                     this._systeemdatumstandaard = this.date_to_standaard_string(eenDatumObject);
                     this._systeemdatumlokaal = eenDatumObject.toLocaleDateString();

@@ -43,8 +43,9 @@
                 Klascode: [[klasCode]]<br>
                 Begint om: [[start]]<br>
                 Eindigt om: [[end]]<br><br>
-                <template is="dom-if" if="{{is_docent()}}"><paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
-                <template is="dom-if" if="{{is_student()}}">
+                <template is="dom-if" if="{{is_docent()}}">
+                    <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
+                <template is="dom-if" if="[[is_student()]]">
                     <paper-checkbox on-tap="presentie_rooster" class="set_presentierooster" value$="[[uuid]]">
                         Present
                     </paper-checkbox>
@@ -68,21 +69,25 @@
                 klasCode: {},
                 start: {},
                 end: {},
-                uuid:{},
+                uuid: {
+                    type: String,
+                    notify: true
+                }
+
             },
             listeners: {
                 'request': 'ajaxRequest',
                 'response': 'ajaxResponse'
             },
             presentie_rooster: function (e) {
-                            $.ajax({
-                                type: 'POST',
-                                url: '/rooster/les/edit',
-                                data: JSON.stringify({ "uuid": e.target.value, "verwachtAfwezig": e.target.checked,"student": this.nummer }), // or JSON.stringify ({name: 'jonas'}),
+                $.ajax({
+                    type: 'POST',
+                    url: '/rooster/les/edit',
+                    data: JSON.stringify({ "uuid": e.target.value, "verwachtAfwezig": e.target.checked,"student": this.nummer }), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
-                                contentType: "application/json",
-                                dataType: 'json'
-                            });
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
             },
             is_student: function(){
               return this.rol == 'student';
@@ -91,7 +96,11 @@
                 return this.rol == 'docent';
             },
             bekijkPresentie: function() {
-                window.location.assign("/#/systeem/presentieles/?uuid="+les.uuid);
+                console.log("trigger");
+                window.location.assign("/#/systeem/presentieles");
+                var app = document.querySelector('my-app'); // stuur aan my-app de uuid door. Die daarna de presentielijst refreshed.
+                app.uuid = les.uuid;
+                this.closeModal();
             },
 
             closeModal: function() {
@@ -106,6 +115,8 @@
 
             handleResp: function(request) {
                 var self = this;
+                console.log(this.is_student());
+
                 $(this.$.calendar).fullCalendar({
                     header: {
                         left: 'prev,next today',
@@ -114,6 +125,7 @@
                     },
                     editable: false,
                     eventLimit: true,
+                    defaultView: 'basicWeek',
                     events: request.detail.response,
 
                     eventClick: function(calEvent, jsEvent, view) {

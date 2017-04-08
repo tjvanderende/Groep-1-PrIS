@@ -17,6 +17,9 @@
           padding:15px;
           min-height: 400px;
         }
+          span.attentie {
+              color: red;
+          }
       </style>
 
     <nebula-dialog id="dialog">
@@ -52,10 +55,13 @@
                   <template>[[item.nummer]]</template>
               </data-table-column>
                 <data-table-column name="Percentage">
-                    <template>[[item.studentPrecentie]]</template>
+                    <template><span class$="[[needsAttention(item.studentPrecentie)]]">[[item.studentPrecentie]]</span></template>
+                </data-table-column>
+                <data-table-column name="Status">
+                    <template>[[item.studentStatus]]</template>
                 </data-table-column>
                 <data-table-column name="Selecteer">
-                    <template><a on-tap="load_student" href="/#/systeem/account/?student={{item.nummer}}">selecteer</a></template>
+                    <template><a on-tap="_load_student">selecteer</a></template>
                 </data-table-column>
             </iron-data-table>
 
@@ -82,20 +88,22 @@
                         notify: true
                     }
                 },
-                load_student: function(e){
-                  location.reload();
+                needsAttention: function(percentage){
+                    if(percentage <= 30){
+                        return "attentie";
+                    } else {
+                        return "";
+                    }
+                },
+                _load_student: function(event){
+                    var model = event.model.item;
+                    var app = document.querySelector('my-app'); // stuur aan my-app de uuid door. Die daarna de presentielijst refreshed.
+                    window.location.assign("/#/systeem/account");
+
+                    app.studentNummer = model.nummer;
                 },
                 handler: function(request){
                     this.klassen = request.detail.response;
-
-                 /*   var table = this.$.presentielijst;
-
-                    table.addEventListener('selecting-item', function(e) {
-                        e.preventDefault(); // this will cancel the default selection behavior
-
-                    });*/
-                },
-                testHandler:function(request){
 
                 },
                 ready: function() {

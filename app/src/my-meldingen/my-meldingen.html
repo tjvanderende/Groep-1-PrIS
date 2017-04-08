@@ -15,7 +15,8 @@
     </template> -->
     <template is="dom-bind">
         <iron-ajax url="/meldingen" last-response="{{data}}" auto></iron-ajax>
-        <iron-data-table items="[[data]]" selection-enabled>
+        <!--<template is="dom-if" if="{"></template>-->
+        <iron-data-table id="meldingen" items="[[data]]" selection-enabled>
             <!-- <iron-data-table items="[[data]]"> -->
 
 
@@ -28,9 +29,7 @@
 
             <data-table-column name="Studentnr">
                 <template>
-                    <a href$="[[_c_baseURL]]/systeem/account/?nummer={{item.nummer}}">
-                        <span>[[item.nummer]]</span>
-                    </a>
+                    [[item.nummer]]
                 </template>
             </data-table-column>
             <data-table-column name="Presentie">
@@ -59,8 +58,15 @@
                     }
                 },
                 ready: function(){
+                    this.$.meldingen.addEventListener('selecting-item', function(e){
+                       var item = e.detail.item;
+                        window.location.assign("/#/systeem/account");
+                        var app = document.querySelector('my-app'); // stuur aan my-app de uuid door. Die daarna de presentielijst refreshed.
+                        app.studentNummer = item.nummer;
+                    });
                     console.log(this.subroutes);
                 }
+
             });
 
         })();

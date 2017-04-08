@@ -57,7 +57,8 @@ public class PersonController implements Handler {
         JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
         jsonBuilder.add("email", studentByNummer.getEmail())
                    .add("nummer", studentByNummer.getStudentNummer())
-                   .add("voornaam", studentByNummer.getVoornaam()).add("username", studentByNummer.getUsername())
+                   .add("voornaam", studentByNummer.getVoornaam())
+                    .add("achternaam", studentByNummer.getAchternaam())
                     .add("presentie", studentByNummer.calculatePercentage())
                     .add("statusToelichting", studentByNummer.getStudentStatusToelichting())
                     .add("status", studentByNummer.getStudentStatus());

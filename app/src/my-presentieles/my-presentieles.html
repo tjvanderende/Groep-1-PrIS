@@ -97,7 +97,8 @@
                 properties: {
                     uuid: {
                         type: String,
-                        value: $.url().split("=")[1]
+                        notify: true,
+                        observer: '_uuid_changed'
                     },
                     _c_studenten: {
                         type: Array, /* array<student-info>: student-info = {id, firstName, lastName, sameGroup}
@@ -117,68 +118,39 @@
                     },
                     c_visible: {
                         type: Boolean, /* true when element is the active visible item */
-                        value: false,
-                        observer: '_initializing', /* wordt ook aangeroepen bijwisseling van true naar false.
-                         regel in de functie dat er niets gebeurd
-                         als c_visible false is */
+                        value: false
                     },
                 },
+
                 hresponse: function (request) {
                     this.c_visible = false;
                     console.log(request.detail.response);
                     this.data = request.detail.response;
                 },
+                _activeChanged: function(){
+
+                },
                 presentie: function (e) {
-                    uuid = $.url().split("=")[1];
                     $.ajax({
                         type: 'POST',
                         url: '/rooster/les/edit',
-                        data: JSON.stringify({"uuid": uuid, "afwezigheid": e.target.checked, "student": parseInt(e.target.value)}), // or JSON.stringify ({name: 'jonas'}),
+                        data: JSON.stringify({"uuid": this.uuid, "afwezigheid": e.target.checked, "student": parseInt(e.target.value)}), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
                         contentType: "application/json",
                         dataType: 'json'
                     });
                 },
-                _go_home: function () {
-                    var lApp = document.querySelector('my-app');  //het polymer element <my-app>
-                    var lAppRouter = lApp.$.approuter;            // het html-element <app-route> met id=approuter
-                    lAppRouter.data = {page: ""};                   // vul het data attribute met de homepage url
-                },
 
-                _initializing: function () {
-                    if (this.c_visible) {    /* zodra zichtbaar geworden haal info op van server */
-//                        location.reload();
-//                        console.log("_ophalen_lesinfo_request_handler");
-                        this.$.ajax_studenten_ophalen.contentType = "application/json";
-                        this.$.ajax_studenten_ophalen.body = {};
-                        this.$.ajax_studenten_ophalen.generateRequest();
-                    }
+                _uuid_changed: function(){
+                    this.$.ajax_studenten_ophalen.contentType = "application/json";
+                    this.$.ajax_studenten_ophalen.body = {};
+                    this.$.ajax_studenten_ophalen.generateRequest();
                 },
-
-                _studenten_ophalen_les_request_handler: function () {
-                    console.log("_studenten_ophalen_les_request_handler user=" + this.c_username);
-                    this.$.ajax_medestudenten_ophalen.contentType = "application/json";
-                    this.$.ajax_medestudenten_ophalen.body = {
-                        "username": this.c_username
-//                        moet les ophalen met les id en
-                    };
-                    this.$.ajax_medestudenten_ophalen.generateRequest();
-                },
-
                 _medestudenten_ophalen_response_handler: function (request) {
                     console.log("_mededestudenten_ophalen_response_handler aantal studenten=" + request.detail.response.length);
                     this._c_studenten = request.detail.response;
                 },
 
-                _medestudenten_opslaan_request_handler: function () {
-                    console.log("_medestudenten_opslaan_request_handler user=" + this.c_username);
-                    this.$.ajax_medestudenten_opslaan.contentType = "application/json";
-                    this.$.ajax_medestudenten_opslaan.body = {
-                        "username": this.c_username,
-                        "groupMembers": this._c_studenten
-                    };
-                    this.$.ajax_medestudenten_opslaan.generateRequest();
-                },
 
                 _medestudenten_opslaan_response_handler: function (request) {
                     console.log("_mededestudenten_opslaan_response_handler errorcode=" + request.detail.response.errorcode);

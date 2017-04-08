@@ -58,6 +58,7 @@ public class DocentController implements Handler {
 							.add("voornaam", student.getVoornaam())
 							.add("studentPrecentie", student.calculatePercentage())
 							.add("achternaam", student.getAchternaam())
+							.add("studentStatus", student.getStudentStatus())
 							.add("email", student.getEmail());
 
 					studentArrayBuilder.add(jsonObjectStudent);

@@ -6,6 +6,8 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 
 <dom-module id="my-account">
@@ -67,7 +69,7 @@
         }
     </style>
     <template>
-      <iron-ajax url="/docent" handle-as="json" on-response="handler" auto></iron-ajax>
+      <iron-ajax url="/student?studentNummer={{studentnummer}}" id="get_student" handle-as="json" on-response="handler"></iron-ajax>
         <div class="my_vertical-elements">
             <div class="my-line">
                 <img class="foto-mats" src="../../images/Mats.jpg">
@@ -80,25 +82,28 @@
                 <span class="out">{{email}}</span><br><br><br>
                 <span class="static" id="presentie"> Presentie:</span>
                 <span class="out"> {{presentie}}</span><br><br><br>
+
                 <span class="static" id="status">Status:</span>
                 <span class="out" id="statusid">{{statusvalue}}</span>
-                <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
 
+                <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
                 <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
-                    <paper-listbox id="dropdowncontent" class="dropdown-content" selected={{status}}>
-                        <paper-item>Geen status</paper-item>
-                        <paper-item>Gemeld aan SLB'er</paper-item>
-                        <paper-item>Gemeld aan Decaan</paper-item>
-                        <paper-item>Afgehandeld</paper-item>
+                    <paper-listbox id="dropdowncontent" selected="{{status}}" attr-for-selected="value" class="dropdown-content">
+                        <paper-item value="geen-status">Geen status</paper-item>
+                        <paper-item value="bij-slber">Gemeld aan SLB'er</paper-item>
+                        <paper-item value="bij-decaan">Gemeld aan Decaan</paper-item>
+                        <paper-item value="afgehandeld">Afgehandeld</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
-                <br><br>
 
+                <br><br>
                 <span id="toelichting" class="static">Toelichting: </span>
-                <span id="toelichtingout" class="out">{{toelichting}}</span>
-                <textarea id="nieuw" class="nieuw">{{toelichting}}</textarea><br>
+                <span id="toelichtingout" class="out">[[toelichting]]</span>
+                <paper-textarea id="nieuw" class="nieuw" label="Status toelichting" value="[[toelichting]]"></paper-textarea>
+                <br>
                 <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
                 <paper-button id="submit" class="submit" on-tap="hide">Submit</paper-button>
+
             </div>
         </div>
     </template>
@@ -109,9 +114,10 @@
         Polymer({
             is: "my-account",
             properties: {
-                studentNummer: {
-                    type: Number,
-                    value: 38383838
+                studentnummer: {
+                    type: String,
+                    notify:true,
+                    observer: '_number_changed'
                 },
                 _ar_page: {
                     type: String,
@@ -139,11 +145,22 @@
                 },
 
             },
-
+            _no_status: function(){
+                return this.status == "geen-status";
+            },
+            _number_changed: function(){
+                this.$.get_student.generateRequest();
+            },
             handler: function(request) {
-                this.klassen = request.detail.response;
-                console.log(this.klassen);
-                var url = window.location.href; // or window.location.href for current url
+                var data = request.detail.response;
+
+                console.log(data);
+                this.presentie = data.presentie;
+                this.naam = data.voornaam + " " + data.achternaam;
+                this.toelichting = data.statusToelichting;
+                this.status = data.status;
+                this.email = data.email;
+             /*   var url = window.location.href; // or window.location.href for current url
                 var captured = /student=([^&]+)/.exec(url)[1];
                 for (var i = 0; i < this.klassen.length; i++) {
                     for (var j = 0; j < this.klassen[i].studenten.length; j++) {
@@ -154,7 +171,7 @@
                             this.presentie = this.klassen[i].studenten[j].studentPrecentie;
                         }
                     }
-                }
+                }*/
             },
             get_student: function(request) {
                 var student = request.detail.response;
@@ -170,7 +187,9 @@
                 }
             },
 
-
+            attached: function(e){
+              console.log('param', this.params);
+            },
             ready: function() {
                 toelichtingvar = this.$.toelichting;
                 toelichtingoutvar = this.$.toelichtingout;
@@ -181,7 +200,7 @@
                 dropdownvar = this.$.dropdown;
                 statusidvar = this.$.statusid;
                 statusvar = this.$.status;
-
+                this.$.get_student.generateRequest();
             },
 
             hide: function() {
