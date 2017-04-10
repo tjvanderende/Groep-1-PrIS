@@ -69,54 +69,52 @@
         }
     </style>
     <template>
-      <iron-ajax url="/student?studentNummer={{studentnummer}}" id="get_student" handle-as="json" on-response="handler"></iron-ajax>
-        <div class="my_vertical-elements">
-            <div class="my-line">
-                <!--<img class="foto-mats" src="../../images/Mats.jpg">-->
+        <iron-ajax url="/student?studentNummer={{studentnummer}}" id="get_student" handle-as="json" on-response="handler"></iron-ajax>
+          <div class="my_vertical-elements">
+              <div class="my-line">
+                  <!--<img class="foto-mats" src="../../images/Mats.jpg">-->
 
-                <span class="static">Naam:</span>
-                <span class="out">{{naam}}</span><br><br><br>
-                <span class="static">Studentnummer:</span>
-                <span class="out">{{studentnummer}}</span><br><br><br>
-                <span class="static">Email:</span>
-                <span class="out">{{email}}</span><br><br><br>
-                <span class="static" id="presentie"> Presentie:</span>
-                <span class="out"> {{presentie}}</span><br><br><br>
+                  <span class="static">Naam:</span>
+                  <span class="out">{{naam}}</span><br><br><br>
+                  <span class="static">Studentnummer:</span>
+                  <span class="out">{{studentnummer}}</span><br><br><br>
+                  <span class="static">Email:</span>
+                  <span class="out">{{email}}</span><br><br><br>
+                  <span class="static" id="presentie"> Presentie:</span>
+                  <span class="out">{{presentie}}%</span><br><br><br>
+                  <span class="static" id="status">Status:</span>
+                  <span class="out" id="statusid">{{status}}</span>
 
-                <span class="static" id="status">Status:</span>
-                <span class="out" id="statusid">{{statusvalue}}</span>
+                  <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
+                  <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
+                      <paper-listbox id="dropdowncontent" class="dropdown-content">
+                          <paper-item value="geen-status">Geen status</paper-item>
+                          <paper-item value="bij-slber">Gemeld aan SLB'er</paper-item>
+                          <paper-item value="bij-decaan">Gemeld aan Decaan</paper-item>
+                          <paper-item value="afgehandeld">Afgehandeld</paper-item>
+                      </paper-listbox>
+                  </paper-dropdown-menu>
 
-                <button id="wijzig" class="wijzig" on-tap="wijzig">Wijzig</button>
-                <paper-dropdown-menu id="dropdown" class="dropdown-menu" label="Status">
-                    <paper-listbox id="dropdowncontent" selected="{{status}}" attr-for-selected="value" class="dropdown-content">
-                        <paper-item value="geen-status">Geen status</paper-item>
-                        <paper-item value="bij-slber">Gemeld aan SLB'er</paper-item>
-                        <paper-item value="bij-decaan">Gemeld aan Decaan</paper-item>
-                        <paper-item value="afgehandeld">Afgehandeld</paper-item>
-                    </paper-listbox>
-                </paper-dropdown-menu>
+                  <br><br>
+                  <span id="toelichting" class="static">Toelichting: </span>
+                  <span id="toelichtingout" class="out">[[toelichting]]</span>
+                  <textarea id="nieuw" class="nieuw" label="Status toelichting" value="{{toelichting()}}"></textarea>
+                  <br>
+                  <paper-button id="submit" class="submit" on-tap="submit">Submit</paper-button>
+                  <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
 
-                <br><br>
-                <span id="toelichting" class="static">Toelichting: </span>
-                <span id="toelichtingout" class="out">[[toelichting]]</span>
-                <textarea id="nieuw" class="nieuw" label="Status toelichting" value="[[toelichting]]"></textarea>
-                <br>
-                <paper-button id="submit" class="submit" on-tap="hide">Submit</paper-button>
-                <paper-button id="close" class="close" on-tap="hide">Cancel</paper-button>
-
-            </div>
-        </div>
-    </template>
+              </div>
+          </div>
+      </template>
 
     <script>
-        var status = 1;
 
         Polymer({
             is: "my-account",
             properties: {
                 studentnummer: {
                     type: String,
-                    notify:true,
+                    notify: true,
                     observer: '_number_changed'
                 },
                 _ar_page: {
@@ -124,31 +122,26 @@
                     observer: "routeChanged"
                 },
                 toelichting: {
-                    type: String,
-                    value: "Student is vaak afwezig geweest door drugsmisbruik"
+                    type: String
                 },
                 status: {
-                    type: String,
-                    value: "Gemeld aan SLB'er"
+                    type: String
                 },
                 naam: {
-                    type: String,
-                    value: "Mats de Waard"
+                    type: String
                 },
                 email: {
-                    type: String,
-                    value: "mats.dewaard@student.hu.nl"
+                    type: String
                 },
                 presentie: {
-                    type: String,
-                    value: "12"
+                    type: String
                 },
 
             },
-            _no_status: function(){
+            _no_status: function() {
                 return this.status == "geen-status";
             },
-            _number_changed: function(){
+            _number_changed: function() {
                 this.$.get_student.generateRequest();
             },
             handler: function(request) {
@@ -161,26 +154,20 @@
                 this.toelichting = data.statusToelichting;
                 this.status = data.status;
                 this.email = data.email;
-             /*   var url = window.location.href; // or window.location.href for current url
-                var captured = /student=([^&]+)/.exec(url)[1];
-                for (var i = 0; i < this.klassen.length; i++) {
-                    for (var j = 0; j < this.klassen[i].studenten.length; j++) {
-                        if (this.klassen[i].studenten[j].nummer == captured){
-                            this.studentNummer = this.klassen[i].studenten[j].nummer;
-                            this.naam = this.klassen[i].studenten[j].voornaam + " " + this.klassen[i].studenten[j].achternaam;
-                            this.email = this.klassen[i].studenten[j].email;
-                            this.presentie = this.klassen[i].studenten[j].studentPrecentie;
-                        }
-                    }
-                }*/
-            },
-            get_student: function(request) {
-                var student = request.detail.response;
-                this.status = student.status;
-                this.toelichting = student.statusToelichting;
-                this.email = student.email;
-                this.naam = student.voornaam;
-                this.presentie = student.presentie;
+                this.presentie = data.presentie;
+                /*   var url = window.location.href; // or window.location.href for current url
+                   var captured = /student=([^&]+)/.exec(url)[1];
+                   for (var i = 0; i < this.klassen.length; i++) {
+                       for (var j = 0; j < this.klassen[i].studenten.length; j++) {
+                           if (this.klassen[i].studenten[j].nummer == captured){
+                               this.studentNummer = this.klassen[i].studenten[j].nummer;
+                               this.naam = this.klassen[i].studenten[j].voornaam + " " + this.klassen[i].studenten[j].achternaam;
+                               this.email = this.klassen[i].studenten[j].email;
+                               this.presentie = this.klassen[i].studenten[j].studentPrecentie;
+                           }
+                       }
+                   }*/
+
             },
             attributeChanged: function(name, type) {
                 if (this.getAttribute('class').includes('iron-selected')) {
@@ -188,8 +175,8 @@
                 }
             },
 
-            attached: function(e){
-              console.log('param', this.params);
+            attached: function(e) {
+                console.log('param', this.params);
             },
             ready: function() {
                 toelichtingvar = this.$.toelichting;
@@ -201,11 +188,9 @@
                 dropdownvar = this.$.dropdown;
                 statusidvar = this.$.statusid;
                 statusvar = this.$.status;
-                this.$.get_student.generateRequest();
             },
 
             hide: function() {
-                this.$.dropdowncontent.selected = status;
                 closevar.style.display = "none";
                 dropdownvar.style.display = "none";
                 submitvar.style.display = "none";
@@ -217,19 +202,29 @@
                 wijzigvar.style.display = "inline";
             },
             submit: function() {
-                toelichting = this.$.nieuw.value;
-                statusvalue = this.$.dropdown.value;
-                this.$.statusid.innerHTML = statusvalue;
+                this.toelichting = this.$.nieuw.value;
+                this.status = this.$.dropdown.value;
                 closevar.style.display = "none";
                 dropdownvar.style.display = "none";
                 submitvar.style.display = "none";
                 nieuwvar.style.display = "none";
-                statusidvar.style.display = "inline";
+                statusidvar.style.display = "inlin  e";
                 statusvar.style.display = "inline";
                 toelichtingvar.style.display = "inline";
-                toelichtingoutvar.innerHTML = toelichting;
                 toelichtingoutvar.style.display = "inline";
                 wijzigvar.style.display = "inline";
+                $.ajax({
+                    type: 'POST',
+                    url: '/meldingen/edit',
+                    data: JSON.stringify({
+                        "toelichting": this.toelichting,
+                        "status": this.status,
+                        "nummer": this.studentnummer,
+                    }), // or JSON.stringify ({name: 'jonas'}),
+                    success: function(data) { console.log('data: ' + data); },
+                    contentType: "application/json",
+                    dataType: 'json'
+                })
             },
             wijzig: function() {
                 statusidvar.style.display = "none";
