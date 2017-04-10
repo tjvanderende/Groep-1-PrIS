@@ -71,10 +71,20 @@ public class PrIS {
 		}
 		return personLessen;
 	}
+
+	/**
+	 * Haal alle lessen op.
+	 * @return
+	 */
 	public ArrayList<Les> getLessen(){
 		return this.lessen;
 	}
 
+	/**
+	 *
+	 * @param nummer
+	 * @return
+	 */
 	public Student getStudentByNummer(int nummer){
 		Student studentByNummer = null;
 		for(Les les : this.dataService.loadLessen()){
@@ -86,15 +96,6 @@ public class PrIS {
             }
         }
 		return studentByNummer;
-	}
-	/**
-	 * 
-	 * @param docentEmail
-	 * @return
-	 */
-	public ArrayList<Student>loadSLBMeldingen(String docentEmail){
-		return null;
-		
 	}
 
 

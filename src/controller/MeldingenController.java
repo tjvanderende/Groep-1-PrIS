@@ -31,23 +31,20 @@ public class MeldingenController implements Handler{
     private void editMeldingen(Conversation conversation){
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonObject jsonObject = (JsonObject) conversation.getRequestBodyAsJSON();
-        boolean aanwezig = jsonObject.getBoolean("aanwezig");
+        String toelichting = jsonObject.getString("toelichting");
+        String status = jsonObject.getString("status");
         int nummer = jsonObject.getInt("nummer");
-        String uuid = jsonObject.getString("uuid");
         if(this.infoSysteem.isLoggedIn()) {
             Student otherStudent = infoSysteem.getStudentByNummer(nummer);
-            StudentPresentie presentie = otherStudent.getPresentieByLes(uuid);
-            if(this.infoSysteem.getSystemRole(infoSysteem.getLoggedInPerson()) == "student"){
-                Student student = (Student) infoSysteem.getLoggedInPerson();
-                if(student.getStudentNummer() == otherStudent.getStudentNummer()){
-                    infoSysteem.setPresentie(student, uuid, aanwezig);
-                    conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
-                } else {
-                    conversation.sendJSONMessage(new Error("Je bent geen eigenaar van dit account", 500).make());
-                }
+            if(this.infoSysteem.getSystemRole(infoSysteem.getLoggedInPerson()) == "docent"){
+                otherStudent.setStudentStatus(status);
+                otherStudent.setStudentStatusToelichting(toelichting);
+                conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
             } else {
                 conversation.sendJSONMessage(new Error("Je moet student zijn om deze functionaliteit te gebruiken", 500).make());
             }
+        } else {
+            conversation.sendJSONMessage(new Error("Je moet ingelogd zijn om deze functionaliteit te gebruiken", 500).make());
         }
     }
     private void toonMeldingen(Conversation conversation) {
