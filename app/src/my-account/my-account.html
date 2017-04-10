@@ -72,12 +72,12 @@
       <iron-ajax url="/student?studentNummer={{studentnummer}}" id="get_student" handle-as="json" on-response="handler"></iron-ajax>
         <div class="my_vertical-elements">
             <div class="my-line">
-                <img class="foto-mats" src="../../images/Mats.jpg">
+                <!--<img class="foto-mats" src="../../images/Mats.jpg">-->
 
                 <span class="static">Naam:</span>
                 <span class="out">{{naam}}</span><br><br><br>
                 <span class="static">Studentnummer:</span>
-                <span class="out">{{studentNummer}}</span><br><br><br>
+                <span class="out">{{studentnummer}}</span><br><br><br>
                 <span class="static">Email:</span>
                 <span class="out">{{email}}</span><br><br><br>
                 <span class="static" id="presentie"> Presentie:</span>
@@ -157,6 +157,7 @@
                 console.log(data);
                 this.presentie = data.presentie;
                 this.naam = data.voornaam + " " + data.achternaam;
+                this.studentnummer = data.nummer;
                 this.toelichting = data.statusToelichting;
                 this.status = data.status;
                 this.email = data.email;

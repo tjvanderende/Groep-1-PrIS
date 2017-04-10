@@ -77,7 +77,7 @@
             <data-table-column name="Presentie">
                 <template is="dom-if" if="[[item.presentie.verwachtAfwezig]]">
                     <paper-checkbox on-tap="presentie"
-                                    class="my-check set_presentie"
+                                    class$="my-check {{verwachtafwezig(item.presentie.verwachtAfwezig)}} set_presentie"
                                     checked="[[item.presentie.aanwezig]]" value$="[[item.nummer]]">
                     </paper-checkbox>
                 </template>
@@ -120,8 +120,18 @@
                         type: Boolean, /* true when element is the active visible item */
                         value: false
                     },
-                },
+                    verwacht:{
+                        type: Boolean,
+                    }
 
+                },
+                verwachtafwezig: function(verwacht){
+                    if(verwacht){
+                        return "rood";
+                    }else{
+                        return "";
+                    }
+                },
                 hresponse: function (request) {
                     this.c_visible = false;
                     console.log(request.detail.response);
