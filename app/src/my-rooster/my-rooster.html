@@ -48,7 +48,7 @@
                     <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
                 <template is="dom-if" if="[[is_student()]]">
                     <paper-checkbox on-tap="presentie_rooster" class="set_presentierooster" value$="[[uuid]]">
-                        Present
+                        Afwezig
                     </paper-checkbox>
                 </template>
                 <paper-button class="red" on-tap="closeModal">Sluit</paper-button>
