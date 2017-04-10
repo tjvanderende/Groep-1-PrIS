@@ -122,7 +122,7 @@ public class RoosterController implements Handler {
 		conversation.sendJSONMessage(lJsonOutStr);
 	}
 	private void ophalenLessen(Conversation conversation) throws NullPointerException{
-		ArrayList<Les> lessen = this.informatieSysteem.getLessen();
+		ArrayList<Les> lessen = this.informatieSysteem.getLessenByPerson();
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
 
 		for(Les les : lessen){

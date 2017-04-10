@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class PrIS {
 	private PrISService dataService;
 	private ArrayList<Les> lessen = new ArrayList<Les>();
+	private ArrayList<Les> lessenByPerson = new ArrayList<Les>();
 	private Person loggedInPerson;
 	public PrIS(){
 		
@@ -22,6 +23,7 @@ public class PrIS {
          * Haal ingelogde persoon op;
          * else helaas geen rooster = geen data door de hele applicatie.
          */
+        this.lessen = this.dataService.loadLessen();
 
 	}
 
@@ -53,7 +55,7 @@ public class PrIS {
 	 */
 	public ArrayList<Les> loadLessenByPerson(Person person) {
 		ArrayList<Les> personLessen = new ArrayList<>();
-		for(Les les : this.dataService.loadLessen()) {
+		for(Les les : this.getLessen()) {
             /**
              * Als het een docent is , gebruik de mail om de lessen op te halen.
              */
@@ -79,7 +81,6 @@ public class PrIS {
 	public ArrayList<Les> getLessen(){
 		return this.lessen;
 	}
-
 	/**
 	 *
 	 * @param nummer
@@ -87,7 +88,7 @@ public class PrIS {
 	 */
 	public Student getStudentByNummer(int nummer){
 		Student studentByNummer = null;
-		for(Les les : this.dataService.loadLessen()){
+		for(Les les : this.getLessen()){
 			ArrayList<Student> studenten = les.getKlas().getStudenten();
             for (Student student: studenten) {
                 if(student.getStudentNummer() == nummer){
@@ -127,14 +128,14 @@ public class PrIS {
 	public boolean login(String username, String password){
 		this.loggedInPerson = this.validateLoginInfo(username, password);
 		if(this.loggedInPerson != null){
-			this.lessen = this.loadLessenByPerson(this.loggedInPerson); // laadt nu alle data in met de persoon.
+			this.lessenByPerson = this.loadLessenByPerson(this.loggedInPerson); // laadt nu alle data in met de persoon.
 			return true;
 		} else {
 			return false;
 		}
 	}
 	public Person validateLoginInfo(String username, String password){
-		for(Les les : this.dataService.loadLessen()) {
+		for(Les les : getLessen()) {
 			if(les.getDocent().getUsername().equals(username) && les.getDocent().getPassword().equals(password)){
 				return les.getDocent();
 			}
@@ -177,6 +178,10 @@ public class PrIS {
 
 	public void logout() {
 		this.loggedInPerson = null;
+	}
+
+	public ArrayList<Les> getLessenByPerson() {
+		return lessenByPerson;
 	}
 }
 

@@ -7,6 +7,7 @@
 <script src='../../bower_components/jquery/dist/jquery.min.js'></script>
 <script src='../../bower_components/moment/min/moment.min.js'></script>
 <script src='../../bower_components/fullcalendar/dist/fullcalendar.js'></script>
+<script src='../../bower_components/fullcalendar/dist/locale-all.js'></script>
 
 <dom-module id="my-rooster">
     <template>
@@ -54,7 +55,7 @@
             </div>
         </nebula-dialog>
 
-        <iron-ajax url="/rooster" handle-as="json" auto on-response="handleResp"></iron-ajax>
+        <iron-ajax url="/rooster" handle-as="json" id="load_rooster" on-response="handleResp"></iron-ajax>
 
     </template>
 
@@ -72,12 +73,20 @@
                 uuid: {
                     type: String,
                     notify: true
+                },
+                c_visible: {
+                    type: String,
+                    observer: 'visible_changed'
                 }
 
             },
             listeners: {
                 'request': 'ajaxRequest',
                 'response': 'ajaxResponse'
+            },
+            visible_changed: function(e){
+                console.log("loade");
+                this.$.load_rooster.generateRequest();
             },
             presentie_rooster: function (e) {
                 $.ajax({
@@ -121,13 +130,13 @@
                     header: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'month,basicWeek,basicDay'
+                        right: 'month,agendaWeek,agendaDay'
                     },
                     editable: false,
                     eventLimit: true,
-                    defaultView: 'basicWeek',
+                    defaultView: 'agendaWeek',
                     events: request.detail.response,
-
+                    locale: 'nl',
                     eventClick: function(calEvent, jsEvent, view) {
                         les = calEvent;
                         self.$.dialog.show();

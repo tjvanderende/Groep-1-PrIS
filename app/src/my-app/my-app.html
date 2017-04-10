@@ -209,7 +209,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          title="PRESENTIELES"
                          element$="my-presentieles">
                     <paper-material elevation="1">
-                        <my-presentieles uuid="[[uuid]]" c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentieles')]]">>
+                        <my-presentieles uuid="[[uuid]]" c_visible="[[_are_strings_equal(_ar_page, 'systeem_presentieles')]]">
                         </my-presentieles>
                     </paper-material>
                 </section>
@@ -250,7 +250,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         -->
                         <my-rooster
                                 rol="{{_rol}}"
-                                nummer="{{_nummer}}">
+                                nummer="{{_nummer}}"
+                                c_visible="[[_are_strings_equal(_ar_page, 'systeem_rooster')]]">
                         </my-rooster>
                     </paper-material>
                 </section>
