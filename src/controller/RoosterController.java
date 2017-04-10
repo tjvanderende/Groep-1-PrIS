@@ -145,7 +145,6 @@ public class RoosterController implements Handler {
 			if (LocalDate.now().toString().compareTo(les.getDatum()) == 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getStartTijd()) > 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getEindTijd()) < 0){
 				isBezig = true;
 				kleur = "green";
-				System.out.println("zou moeten werken");
 			}
 			jsonObjectLes.add("color" , kleur)
 				     .add("isBezig", isBezig);
