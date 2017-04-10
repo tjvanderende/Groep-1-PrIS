@@ -83,6 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background: var(--app-lightgray);
             }
 
+
         </style>
 
         <app-location route="{{_ar_route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
@@ -136,10 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <img id="toolbarlogo" src="../../images/hu_logo.png" alt="HU"/>
                 </app-toolbar>
                 <iron-selector selected="[[_ar_page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="home" href$="[[_c_baseURL]]">
-                        <iron-icon icon="home"></iron-icon>
-                        <span>Home</span>
-                    </a>
+
 
                     <a name="systeem_account" href$="[[_c_baseURL]]systeem/account"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
                         <iron-icon icon="icons:today"></iron-icon>
@@ -439,7 +437,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         this._ar_page = pNewPage;
                     }
                 },
-
+                _show_error: function(e){
+                    console.log("sho toast");
+                },
                 _ar_selected_object_changed: function (pSelectedObject) {
                     // Load page import on demand. Show 404 page if fails
                     if (pSelectedObject == undefined) {

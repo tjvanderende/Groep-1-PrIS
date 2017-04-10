@@ -124,37 +124,39 @@ public class RoosterController implements Handler {
 	private void ophalenLessen(Conversation conversation) throws NullPointerException{
 		ArrayList<Les> lessen = this.informatieSysteem.getLessenByPerson();
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
+		if(this.informatieSysteem.isLoggedIn()){
+			for(Les les : lessen){
+				JsonObjectBuilder jsonObjectLes = Json.createObjectBuilder(); // maak het JsonObject voor een student
+				JsonObjectBuilder jsonObjectDocent = Json.createObjectBuilder();
+				JsonObjectBuilder jsonObjectKlas = Json.createObjectBuilder();
 
-		for(Les les : lessen){
-			JsonObjectBuilder jsonObjectLes = Json.createObjectBuilder(); // maak het JsonObject voor een student
-			JsonObjectBuilder jsonObjectDocent = Json.createObjectBuilder();
-			JsonObjectBuilder jsonObjectKlas = Json.createObjectBuilder();
-			
-			jsonObjectKlas.add("klascode", les.getKlas().getKlasCode())
-						   .add("klasnaam", les.getKlas().getKlasNaam());
-			
-			jsonObjectDocent.add("email", les.getDocent().getEmail())
-							.add("voornaam", les.getDocent().getVoornaam());
-			
-			jsonObjectLes.add("start",les.getDatum()+ "T"+les.getStartTijd()) // "2017-03-30T11:30";
-						 .add("end", les.getDatum()+ "T"+ les.getEindTijd())
-						 .add("uuid", les.getLesNummer())
-						 .add("title", les.getCursusCode())
-						 .add("docent", jsonObjectDocent)
-						 .add("klas", jsonObjectKlas);
-			if (LocalDate.now().toString().compareTo(les.getDatum()) == 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getStartTijd()) > 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getEindTijd()) < 0){
-				isBezig = true;
-				kleur = "green";
+				jsonObjectKlas.add("klascode", les.getKlas().getKlasCode())
+						.add("klasnaam", les.getKlas().getKlasNaam());
+
+				jsonObjectDocent.add("email", les.getDocent().getEmail())
+						.add("voornaam", les.getDocent().getVoornaam());
+
+				jsonObjectLes.add("start",les.getDatum()+ "T"+les.getStartTijd()) // "2017-03-30T11:30";
+						.add("end", les.getDatum()+ "T"+ les.getEindTijd())
+						.add("uuid", les.getLesNummer())
+						.add("title", les.getCursusCode())
+						.add("docent", jsonObjectDocent)
+						.add("klas", jsonObjectKlas);
+				if (LocalDate.now().toString().compareTo(les.getDatum()) == 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getStartTijd()) > 0 && LocalTime.now().toString().substring(0,5).compareTo(les.getEindTijd()) < 0){
+					isBezig = true;
+					kleur = "green";
+				}
+				jsonObjectLes.add("color" , kleur)
+						.add("isBezig", isBezig);
+
+				jsonArrayBuilder.add(jsonObjectLes);													//voeg het JsonObject aan het array toe
+
 			}
-			jsonObjectLes.add("color" , kleur)
-				     .add("isBezig", isBezig);
-	
-			jsonArrayBuilder.add(jsonObjectLes);													//voeg het JsonObject aan het array toe				     
-
+			String lJsonOutStr = jsonArrayBuilder.build().toString();												// maak er een string van
+			conversation.sendJSONMessage(lJsonOutStr);
+		} else {
+			conversation.sendJSONMessage(new Error("Je moet ingelogd zijn!", 500).make());
 		}
-		String lJsonOutStr = jsonArrayBuilder.build().toString();												// maak er een string van
-		conversation.sendJSONMessage(lJsonOutStr);	
-
 	}
 	
 }

@@ -8,11 +8,17 @@
 <script src='../../bower_components/moment/min/moment.min.js'></script>
 <script src='../../bower_components/fullcalendar/dist/fullcalendar.js'></script>
 <script src='../../bower_components/fullcalendar/dist/locale-all.js'></script>
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="my-rooster">
     <template>
+        <paper-toast id="toon_foutmelding_algemeen" with-backdrop="true" duration="2000">
+        </paper-toast>
         <style include="fullcalendar-styles">
+            paper-toast {
+                --paper-toast-background-color: #e24141;
 
+            }
             .lesInfo{
                 min-width: 150px;
                 max-width: 400px;
@@ -86,7 +92,8 @@
                 'response': 'ajaxResponse'
             },
             visible_changed: function(e){
-                console.log("loade");
+                $(this.$.calendar).fullCalendar( 'removeEvents');
+
                 this.$.load_rooster.generateRequest();
             },
             presentie_rooster: function (e) {
@@ -106,7 +113,6 @@
                 return this.rol == 'docent';
             },
             bekijkPresentie: function() {
-                console.log("trigger");
                 window.location.assign("/#/systeem/presentieles");
                 var app = document.querySelector('my-app'); // stuur aan my-app de uuid door. Die daarna de presentielijst refreshed.
                 app.uuid = les.uuid;
@@ -125,30 +131,38 @@
 
             handleResp: function(request) {
                 var self = this;
-                console.log(this.is_student());
+                var data = request.detail.response;
+                if(data.status == 500){
+                    console.log(data);
+                    var toast = this.$.toon_foutmelding_algemeen;
+                    toast.text = data.message;
+                    toast.open();
+                } else {
+                    $(this.$.calendar).fullCalendar({
+                        header: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'month,agendaWeek,agendaDay'
+                        },
+                        editable: false,
+                        eventLimit: true,
+                        defaultView: 'agendaWeek',
+                        locale: 'nl',
+                        eventClick: function(calEvent, jsEvent, view) {
+                            les = calEvent;
+                            self.$.dialog.show();
+                            self.vakNaam = calEvent.title;
+                            self.vakDocent = calEvent.docent.email;
+                            self.klasCode = calEvent.klas.klascode;
+                            self.start = calEvent._start._i;
+                            self.end = calEvent._end._i;
+                            self.uuid = calEvent.uuid;
+                        }
+                    });
+                    $(this.$.calendar).fullCalendar( 'addEventSource', data);
+                    $(this.$.calendar).fullCalendar( 'rerenderEvents' );
+                }
 
-                $(this.$.calendar).fullCalendar({
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
-                    },
-                    editable: false,
-                    eventLimit: true,
-                    defaultView: 'agendaWeek',
-                    events: request.detail.response,
-                    locale: 'nl',
-                    eventClick: function(calEvent, jsEvent, view) {
-                        les = calEvent;
-                        self.$.dialog.show();
-                        self.vakNaam = calEvent.title;
-                        self.vakDocent = calEvent.docent.email;
-                        self.klasCode = calEvent.klas.klascode;
-                        self.start = calEvent._start._i;
-                        self.end = calEvent._end._i;
-                        self.uuid = calEvent.uuid;
-                    }
-                });
             }
 
 

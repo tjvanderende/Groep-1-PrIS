@@ -37,8 +37,7 @@ public class MeldingenController implements Handler{
         if(this.infoSysteem.isLoggedIn()) {
             Student otherStudent = infoSysteem.getStudentByNummer(nummer);
             if(this.infoSysteem.getSystemRole(infoSysteem.getLoggedInPerson()) == "docent"){
-                otherStudent.setStudentStatus(status);
-                otherStudent.setStudentStatusToelichting(toelichting);
+                otherStudent.voegStudentStatusToe(status, toelichting);
                 conversation.sendJSONMessage(new Error("Succesvol opgeslagen!", 200).make());
             } else {
                 conversation.sendJSONMessage(new Error("Je moet student zijn om deze functionaliteit te gebruiken", 500).make());
@@ -55,7 +54,7 @@ public class MeldingenController implements Handler{
             if(infoSysteem.getSystemRole(person).equals("docent")){
                 Docent docent = (Docent) person;
                 if(person.isRole("decaan") || person.isRole("slber")){
-                    for(Les les: infoSysteem.getLessen()){
+                    for(Les les: infoSysteem.getLessenByPerson()){
                         for(Student student : les.getKlas().getStudenten()){
                             builder.add("nummer", student.getStudentNummer());
                             builder.add("studentPercentage", student.calculatePercentage());

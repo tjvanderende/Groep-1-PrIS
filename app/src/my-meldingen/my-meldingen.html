@@ -13,8 +13,17 @@
     <!-- <template>
       <h1>Hello world</h1>
     </template> -->
+
     <template is="dom-bind">
-        <iron-ajax url="/meldingen" last-response="{{data}}" auto></iron-ajax>
+        <style>
+            paper-toast {
+                --paper-toast-background-color: #e24141;
+
+            }
+        </style>
+        <paper-toast id="toon_foutmelding_algemeen" with-backdrop="true" duration="2000">
+        </paper-toast>
+        <iron-ajax url="/meldingen" last-response="{{data}}" on-response="handle_meldingen" auto></iron-ajax>
         <!--<template is="dom-if" if="{"></template>-->
         <iron-data-table id="meldingen" items="[[data]]" selection-enabled>
             <!-- <iron-data-table items="[[data]]"> -->
@@ -57,6 +66,14 @@
                         notify: true,
                     }
                 },
+                handle_meldingen: function(request){
+                    var data = request.detail.response;
+                    if(data.status == 500){
+                        var toast = this.$.toon_foutmelding_algemeen;
+                        toast.text = data.message;
+                        toast.open();
+                    }
+                },
                 ready: function(){
                     this.$.meldingen.addEventListener('selecting-item', function(e){
                        var item = e.detail.item;
@@ -64,7 +81,6 @@
                         var app = document.querySelector('my-app'); // stuur aan my-app de uuid door. Die daarna de presentielijst refreshed.
                         app.studentNummer = item.nummer;
                     });
-                    console.log(this.subroutes);
                 }
 
             });

@@ -33,7 +33,7 @@ public class PrIS {
 	 */
 	public ArrayList<Klas> getKlassen() {
 		ArrayList<Klas> klassen = new ArrayList<Klas>();
-		for (Les les : this.getLessen()){
+		for (Les les : this.getLessenByPerson()){
 			if(!klassen.contains(les.getKlas()))
 				klassen.add(les.getKlas());
 		}
@@ -88,7 +88,7 @@ public class PrIS {
 	 */
 	public Student getStudentByNummer(int nummer){
 		Student studentByNummer = null;
-		for(Les les : this.getLessen()){
+		for(Les les : this.getLessenByPerson()){
 			ArrayList<Student> studenten = les.getKlas().getStudenten();
             for (Student student: studenten) {
                 if(student.getStudentNummer() == nummer){
@@ -140,7 +140,7 @@ public class PrIS {
 				return les.getDocent();
 			}
 			for (Student student : les.getKlas().getStudenten()) {
-				if(student.getUsername().equals(username) && student.getPassword().equals(password)){
+				if(student.getEmail().equals(username) && student.getPassword().equals(password)){
 					return student;
 				}
 			}

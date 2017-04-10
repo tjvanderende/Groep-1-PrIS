@@ -41,7 +41,7 @@ public class Student extends Person {
 		 * Wijs een status van "bij-slber" toe aan een student
 		 */
 		this.slbEmail = "jos.vanreenen@hu.nl";
-		this.voegStudentStatusToe("bij-slber", "ziekte");
+		this.voegStudentStatusToe("geen-status", "Geen");
 	}
 	public void voegStudentStatusToe(String status, String toelichting){
 		this.studentStatus = status;
@@ -75,13 +75,6 @@ public class Student extends Person {
 		return presentie;
 		
 	}
-	public void setStudentStatus(String status) {
-		this.studentStatus = status;
-	}
-	public void setStudentStatusToelichting(String toelichting){
-		this.studentStatusToelichting = toelichting;
-	}
-
 	/**
 	 * Voeg nieuwe presentie toe
 	 */
