@@ -50,9 +50,9 @@
                 Klascode: [[klasCode]]<br>
                 Begint om: [[start]]<br>
                 Eindigt om: [[end]]<br><br>
-                <template is="dom-if" if="{{is_docent()}}">
+                <template is="dom-if" if="{{is_docent}}" restamp="true">
                     <paper-button class="blue" on-tap="bekijkPresentie">Bekijk presentie</paper-button></template>
-                <template is="dom-if" if="[[is_student()]]">
+                <template is="dom-if" if="[[is_student]]" restamp="true">
                     <paper-checkbox on-tap="presentie_rooster" class="set_presentierooster" value$="[[uuid]]">
                         Afwezig
                     </paper-checkbox>
@@ -76,6 +76,13 @@
                 klasCode: {},
                 start: {},
                 end: {},
+                rol: {},
+                is_student: {
+                    type: Boolean
+                },
+                is_docent: {
+                    type: Boolean
+                },
                 studentnummer:{},
                 uuid: {
                     type: String,
@@ -95,6 +102,8 @@
                 $(this.$.calendar).fullCalendar( 'removeEvents');
 
                 this.$.load_rooster.generateRequest();
+                this.is_docent = this.rol == 'docent';
+                this.is_student = this.rol == 'student';
             },
             presentie_rooster: function (e) {
                 $.ajax({
@@ -105,12 +114,6 @@
                     contentType: "application/json",
                     dataType: 'json'
                 });
-            },
-            is_student: function(){
-              return this.rol == 'student';
-            },
-            is_docent: function(){
-                return this.rol == 'docent';
             },
             bekijkPresentie: function() {
                 window.location.assign("/#/systeem/presentieles");
