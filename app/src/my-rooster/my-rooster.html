@@ -70,6 +70,7 @@
                 klasCode: {},
                 start: {},
                 end: {},
+                studentnummer:{},
                 uuid: {
                     type: String,
                     notify: true
@@ -92,7 +93,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '/rooster/les/edit',
-                    data: JSON.stringify({ "uuid": e.target.value, "verwachtAfwezig": e.target.checked,"student": this.nummer }), // or JSON.stringify ({name: 'jonas'}),
+                    data: JSON.stringify({ "uuid": e.target.value, "afwezigheid": e.target.checked,"student": this.studentnummer }), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
                     contentType: "application/json",
                     dataType: 'json'

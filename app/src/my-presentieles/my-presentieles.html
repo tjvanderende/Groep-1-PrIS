@@ -30,9 +30,6 @@
                 background: #1a9fd9; /* kind of blue */
                 --paper-button-ink-color: #00567B; /* kind of dark blue */
             }
-            .rood {
-                --paper-checkbox-unchecked-background-color: red;
-            }
 
             .voornaam {
                 min-width: 100px;
@@ -77,14 +74,21 @@
             <data-table-column name="Presentie">
                 <template is="dom-if" if="[[item.presentie.verwachtAfwezig]]">
                     <paper-checkbox on-tap="presentie"
-                                    class$="my-check {{verwachtafwezig(item.presentie.verwachtAfwezig)}} set_presentie"
+                                    class$="my-check set_presentie"
                                     checked="[[item.presentie.aanwezig]]" value$="[[item.nummer]]">
                     </paper-checkbox>
                 </template>
 
             </data-table-column>
-
-
+            <data-table-column name="Verwacht afwezig">
+                <template is="dom-if" if="[[item.presentie.verwachtAfwezig]]">
+                <paper-checkbox on-tap=""
+                                class="my-check set_presentie"
+                                disabled="true"
+                                checked="[[item.presentie.verwachtAfwezig]]">
+                </paper-checkbox>
+                </template>
+            </data-table-column>
         </iron-data-table>
     </template>
 
@@ -120,15 +124,16 @@
                         type: Boolean, /* true when element is the active visible item */
                         value: false
                     },
-                    verwacht:{
+                    verwacht: {
                         type: Boolean,
                     }
 
                 },
-                verwachtafwezig: function(verwacht){
-                    if(verwacht){
-                        return "rood";
-                    }else{
+                verwachtafwezig: function (verwacht) {
+                    console.log(verwacht);
+                    if (verwacht) {
+                        return "background-color: red;width: 16px;";
+                    } else {
                         return "";
                     }
                 },
@@ -137,21 +142,25 @@
                     console.log(request.detail.response);
                     this.data = request.detail.response;
                 },
-                _activeChanged: function(){
+                _activeChanged: function () {
 
                 },
                 presentie: function (e) {
                     $.ajax({
                         type: 'POST',
                         url: '/rooster/les/edit',
-                        data: JSON.stringify({"uuid": this.uuid, "afwezigheid": e.target.checked, "student": parseInt(e.target.value)}), // or JSON.stringify ({name: 'jonas'}),
+                        data: JSON.stringify({
+                            "uuid": this.uuid,
+                            "afwezigheid": e.target.checked,
+                            "student": parseInt(e.target.value)
+                        }), // or JSON.stringify ({name: 'jonas'}),
 //                                    success: function(data) { alert('data: ' + data); },
                         contentType: "application/json",
                         dataType: 'json'
                     });
                 },
 
-                _uuid_changed: function(){
+                _uuid_changed: function () {
                     this.$.ajax_studenten_ophalen.contentType = "application/json";
                     this.$.ajax_studenten_ophalen.body = {};
                     this.$.ajax_studenten_ophalen.generateRequest();
